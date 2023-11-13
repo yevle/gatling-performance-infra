@@ -42,15 +42,18 @@ All containers should be up and running
 
 ## Jenkins
 
-Login to Jenkins with admin/admin(could be changed in docker-compose file)
-By default jenkins consists of 1 job:
+Login to Jenkins with admin/admin(could be changed in docker-compose file).
+By default, jenkins consists of 1 job:
 - **GatlingBackend**: run Gatling simulations with runtime parameters: -SIMULATION -USERS -RAMPUP -DURATION
 
-## Running demo gatling scenario with GatlingBackend
+## Running demo scenario with GatlingBackend job
 
 To run Gatling demo script: **Open GatlingBackend job -> Build with Parameters -> Set simulation -> Set build parameters  -> Build**
 
 This job will start Gatling docker container and execute Demostore.scala gatling scenario
+
+You'll find default test reports inside **Gatling** tab in Jenkins job page: 
+http://localhost:8181/job/GatlingBackend/gatling/ 
 
 ## Making your gatling script compatible with framework
 
