@@ -13,7 +13,7 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>SIMULATION</name>
-          <description>Select scenario to run</description>
+          <description>Select simulation to run</description>
           <defaultValue>demostore.Demostore</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>

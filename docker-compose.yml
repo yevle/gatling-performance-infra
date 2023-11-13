@@ -2,8 +2,6 @@ version: '3.8'
 services:
   grafana:
     container_name: grafana
-    links:
-      - influxdb:influxdb
     image: grafana/grafana
     ports:
       - "8857:3000"
@@ -18,17 +16,20 @@ services:
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/datasources:/etc/grafana/provisioning/datasources
     restart: always
-  influxdb:
-    image: influxdb
-    build: ./influxdb
-    container_name: influxdb
-    volumes:
-      - influxdb:/var/lib/influxdb
-    ports:
-      - "8653:8086"
-    expose:
-      - 8653
-    restart: always
+# Uncomment to use InfluxDB database as Grafana datasource.
+#    links:
+#      - influxdb:influxdb
+#  influxdb:
+#    image: influxdb
+#    build: ./influxdb
+#    container_name: influxdb
+#    volumes:
+#      - influxdb:/var/lib/influxdb
+#    ports:
+#      - "8653:8086"
+#    expose:
+#      - 8653
+#    restart: always
   docker-dind:
     image: docker:dind
     volumes:
