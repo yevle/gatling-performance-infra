@@ -1,9 +1,6 @@
-greenballs:latest
 htmlpublisher:latest
 show-build-parameters:latest
-filesystem-list-parameter-plugin:latest
 git:latest
-rebuild:latest
 persistent-parameter:latest
 postbuild-task:latest
 parameter-separator:latest
