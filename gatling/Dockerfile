@@ -21,6 +21,7 @@ RUN apt-get -y update && apt-get upgrade -y && \
     rsync -av /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
     rm -rf /tmp/*
 
+COPY /conf/. /opt/gatling/conf
 COPY /resources/. /opt/gatling/user-files/resources
 COPY /simulations/. /opt/gatling/user-files/simulations
 COPY entrypoint.sh /

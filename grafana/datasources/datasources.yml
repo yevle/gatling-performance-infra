@@ -8,16 +8,25 @@ datasources:
     url: http://prometheus:9090
     version: 1
     basicAuth: false
-    isDefault: true
+    isDefault: false
     editable: true
     jsonData:
       timeInterval: 5s
 
-  - name: 'gatling'
+  - name: "InfluxDB"
+    id: 1
+    orgId: 1
     type: influxdb
     url: http://influxdb:8086
     access: proxy
-    isDefault: false
-    database: gatling
     user: ''
     password: ''
+    database: "graphite"
+    basicAuth: false
+    basicAuthUser: ""
+    basicAuthPassword: ""
+    withCredentials: false
+    isDefault: true
+    jsonData: {
+      }
+    secureJsonFields: null
