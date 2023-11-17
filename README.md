@@ -13,7 +13,6 @@ Framework consists of next services:
 - **Jenkins**: continuous integration server for tests execution
 - **Gatling**: tool for backend load testing
 - **Prometheus**: time series DB platform for storing Host (Docker) metrics. Depends on:
-- **Node-Exporter**: tool exposes a wide variety of hardware- and kernel-related metrics
 - **cAdvisor**: analyzes and exposes resource usage and performance data from running containers
 - **Redis**: in-memory data store for cAdvisor
 
