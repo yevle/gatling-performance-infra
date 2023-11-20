@@ -63,6 +63,7 @@ services:
     container_name: gatling
     build: ./gatling
     image: "eclipse-temurin:8-jdk"
+    privileged: true
     entrypoint:
       - cat
   prometheus:
