@@ -14,7 +14,6 @@ Framework consists of next services:
 - **Gatling**: tool for backend load testing
 - **Prometheus**: time series DB platform for storing Host (Docker) metrics. Depends on:
 - **cAdvisor**: analyzes and exposes resource usage and performance data from running containers
-- **Redis**: in-memory data store for cAdvisor
 
 ## Prerequisites
 
