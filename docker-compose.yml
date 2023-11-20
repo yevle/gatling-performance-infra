@@ -18,8 +18,6 @@ services:
     restart: always
     links:
       - influxdb:influxdb
-    networks:
-      - framework_network
   influxdb:
     image: influxdb
     build: ./influxdb
@@ -30,8 +28,6 @@ services:
       - "8653:8086"
       - "2003:2003"
     restart: always
-    networks:
-      - framework_network
   docker-dind:
     image: docker:dind
     volumes:
@@ -39,8 +35,6 @@ services:
     container_name: docker-dind
     privileged: true
     restart: always
-    networks:
-      - framework_network
   jenkins:
     image: jenkins/jenkins
     build: ./jenkins
@@ -65,16 +59,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - jenkins-home:/var/jenkins_home
     restart: always
-    networks:
-      - framework_network
   gatling:
     container_name: gatling
     build: ./gatling
     image: "eclipse-temurin:8-jdk"
+    privileged: true
     entrypoint:
       - cat
-    networks:
-      - framework_network
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -92,8 +83,6 @@ services:
       - 9091:9090
     depends_on:
       - cadvisor
-    networks:
-      - framework_network
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor
@@ -108,15 +97,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - redis
-    networks:
-      - framework_network
   redis:
     image: redis:latest
     container_name: redis
     ports:
       - 6379:6379
-    networks:
-      - framework_network
 ## Uncomment to use NewRelic monitoring agent. Need to add License Key to newrelic-infra.yml.
 #  agent:
 #    container_name: newrelic-infra
@@ -132,10 +117,6 @@ services:
 #      - "/:/host:ro"
 #      - "/var/run/docker.sock:/var/run/docker.sock"
 #    restart: unless-stopped
-networks:
-  framework_network:
-    name: framework_network
-    driver: bridge
 volumes:
   docker-dind:
   jenkins-home:
