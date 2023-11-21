@@ -55,7 +55,7 @@ fi</command>
       <configuredLocalRules/>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>docker run --name gatling --net=host --rm --volumes-from=jenkins -e SIMULATION=$SIMULATION -e WORKSPACE=$WORKSPACE -e JAVA_OPTS=&quot;-DUSERS=$USERS -DRAMP_DURATION=$RAMPUP -DTEST_URATION=$DURATION&quot; eclipse-temurin:8-jdk
+      <command>docker run --name gatling --net=host --rm --volumes-from=jenkins -e SIMULATION=$SIMULATION -e WORKSPACE=$WORKSPACE -e JAVA_OPTS=&quot;-DUSERS=$USERS -DRAMP_DURATION=$RAMPUP -DTEST_DURATION=$DURATION&quot; eclipse-temurin:8-jdk
 </command>
       <configuredLocalRules/>
     </hudson.tasks.Shell>
