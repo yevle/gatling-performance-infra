@@ -13,6 +13,24 @@ class FirstSimulation extends Simulation {
     HttpHeaderNames.Accept -> HttpHeaderValues.ApplicationJson
   )
 
+  private def getProperty(propertyName: String, defaultValue: String) = {
+    println(propertyName + " env: " + System.getenv(propertyName))
+    println(propertyName + " property: " + System.getProperty(propertyName))
+    Option(System.getenv(propertyName))
+      .orElse(Option(System.getProperty(propertyName)))
+      .getOrElse(defaultValue)
+  }
+
+  def userCount = getProperty("USERS", "5").toInt
+
+  def rampDuration = getProperty("RAMP_DURATION", "10").toInt
+
+  def testDuration = getProperty("TEST_DURATION", "25").toInt
+
+  before {
+    println(s"Running simulation with:\n ${userCount} users \n ${rampDuration} ramp duration \n ${testDuration} test duration")
+  }
+
   private val scn = scenario("FirstSimulation")
     .exec(
       http("home page")
