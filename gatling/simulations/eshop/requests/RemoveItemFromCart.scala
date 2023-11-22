@@ -19,12 +19,7 @@ object RemoveItemFromCart {
         jsonPath (session => "$.removedProductId").is(session => session("selectedProductId").as[String]),
         jsonPath("$.cartInfo.cartItems[*].product.id").findAll.transform(ids => ids.exists(_ == 3)).is(false) // Check if 3 is not present in idList
       ).check(bodyString.saveAs("responseBody"))
-  ).exec(session => {
-      val responseBody = session("responseBody").as[String] // Retrieve the response body from the session
-      println(s"------Response Body /eshop/control/cart/removeitem: ------\n" + JsonFormatter.formatJson(responseBody)) // Print the response body
-
-      session
-    })
+  )
 
   val headers_general: Map[CharSequence, String] = Map(
     HttpHeaderNames.ContentType -> HttpHeaderValues.ApplicationJson,

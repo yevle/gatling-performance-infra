@@ -15,14 +15,17 @@ class ParameterizedScenario extends Simulation{
   private val orderCreation_OpenScenario: ScenarioBuilder =
     {
       scenario("OrderCreation_Scenario_OpenModel")
-        .exec(OrderCreationChain.execute)
+        .during(testDuration)(OrderCreationChain.execute)
     }
   before(
-    println(s"usersRatePerSecond: $usersRatePerSecond\nrampUpDurationSeconds: $rampUpDurationSeconds\nsteadyStateDurationSeconds: $steadyStateDurationSeconds")
+    println(s"userCount: $userCount\nrampUpDuration: $rampUpDuration\ntestDuration: $testDuration")
   )
-  def usersRatePerSecond: Int = getProperty("USERS_RATE_PS", Configurator.usersRatePerSecond.toString).toInt
-  def rampUpDurationSeconds: Int = getProperty("RAMP_UP_DS", Configurator.rampUpDurationSeconds.toString).toInt
-  def steadyStateDurationSeconds: Int = getProperty("STEADY_STATE_DS", Configurator.steadyStateDurationSeconds.toString).toInt
+
+  def userCount: Int = getProperty("USERS", Configurator.usersCount.toString).toInt
+
+  def rampUpDuration: Int = getProperty("RAMP_DURATION", Configurator.rampUpDurationSeconds.toString).toInt
+
+  def testDuration: Int = getProperty("TEST_DURATION", Configurator.testDurationSeconds.toString).toInt
 
   private def getProperty(propertyName: String, defaultValue: String) = {
     Option(System.getenv(propertyName))
@@ -36,7 +39,7 @@ class ParameterizedScenario extends Simulation{
   )
 
   setUp(
-    orderCreation_OpenScenario.inject(ScenarioInjector.injectOpenModel(usersRatePerSecond, rampUpDurationSeconds, steadyStateDurationSeconds))
+    orderCreation_OpenScenario.inject(ScenarioInjector.injectOpenModel(userCount, rampUpDuration))
   )
     .assertions(asserts)
     .protocols(httpConf)
