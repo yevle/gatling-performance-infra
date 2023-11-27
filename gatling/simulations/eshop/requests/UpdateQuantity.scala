@@ -40,12 +40,4 @@ object UpdateQuantity {
         .set("quantity", Randomizer.getInt(2, 10))
         .set("selectedProductId", Randomizer.getIntFromSeq(session("productsInCart").as[Seq[Int]]))
   )
-  /*
-    .exec(
-    session => {
-       println("selectedProductId: " + session("selectedProductId").as[String])
-       println("quantity: " + session("quantity").as[String])
-      session
-    })
-  */
 }

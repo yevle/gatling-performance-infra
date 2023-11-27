@@ -19,7 +19,12 @@ RUN apt-get -y update && apt-get upgrade -y && \
     mkdir -p /tmp/archive && cd /tmp/archive && \
     unzip /tmp/downloads/gatling-$GATLING_VERSION.zip && \
     rsync -av /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
-    rm -rf /tmp/*
+    rm -rf /tmp/* \
+# Install InfluxDB Java client library
+#RUN mkdir -p /opt/gatling/lib && \
+#    curl -o "/opt/gatling/lib/influxdb-java-2.23.jar" \
+#    https://repo1.maven.org/maven2/org/influxdb/influxdb-java/2.23/influxdb-java-2.23.jar
+
 
 COPY /conf/. /opt/gatling/conf
 COPY /resources/. /opt/gatling/user-files/resources

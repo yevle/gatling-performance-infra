@@ -159,7 +159,7 @@
           "measurement": "gatling.demostore.allRequests.ok.count",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.ok.count\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.ok.count\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -203,7 +203,7 @@
           "measurement": "gatling.demostore.allRequests.ko.count",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.ko.count\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.ko.count\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -408,7 +408,7 @@
           "measurement": "gatling.demostore.allRequests.all.max",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.max\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.max\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -452,7 +452,7 @@
           "measurement": "gatling.demostore.allRequests.all.mean",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.mean\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.mean\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -496,7 +496,7 @@
           "measurement": "gatling.demostore.allRequests.all.min",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.min\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.min\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -628,7 +628,7 @@
           "measurement": "gatling.demostore.allRequests.all.percentiles99",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.percentiles99\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.percentiles99\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -672,7 +672,7 @@
           "measurement": "gatling.demostore.allRequests.all.percentiles95",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.percentiles95\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.percentiles95\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -716,7 +716,7 @@
           "measurement": "gatling.demostore.allRequests.all.percentiles75",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.percentiles75\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.percentiles75\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -760,7 +760,7 @@
           "measurement": "gatling.demostore.allRequests.all.percentiles50",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.allRequests.all.percentiles50\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.${request_name:raw}.all.percentiles50\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "D",
           "resultFormat": "time_series",
@@ -816,6 +816,33 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All request"
+          ],
+          "value": [
+            "$__all_request"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "P951FEA4DE68E13C5"
+        },
+        "definition": "SHOW MEASUREMENTS",
+        "hide": 0,
+        "includeAll": true,
+        "multi": false,
+        "name": "request_name",
+        "options": [],
+        "query": "SHOW MEASUREMENTS",
+        "refresh": 1,
+        "regex": "gatling\\.\\w+\\.(?!users\\b)(\\w+)\\.\\w+\\.\\w+",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -830,3 +857,4 @@
   "version": 1,
   "weekStart": ""
 }
+
