@@ -21,19 +21,29 @@ RUN apt-get -y update && apt-get upgrade -y && \
     rsync -av /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
     rm -rf /tmp/*
 # Install InfluxDB Java client library
-#RUN mkdir -p /opt/gatling/lib && \
-#    curl -o "/opt/gatling/lib/influxdb-java-2.23.jar" \
-#    https://repo1.maven.org/maven2/org/influxdb/influxdb-java/2.23/influxdb-java-2.23.jar \
-#    curl -o "/opt/gatling/lib/influxdb-client-java-6.6.0.jar" \
-#    https://repo1.maven.org/maven2/com/influxdb/influxdb-client-java/6.6.0/influxdb-client-java-6.6.0.jar
+RUN mkdir -p /opt/gatling/lib && \
+    curl -o "/opt/gatling/user-files/lib/influxdb-java-2.23.jar" \
+    https://repo1.maven.org/maven2/org/influxdb/influxdb-java/2.23/influxdb-java-2.23.jar &&\
+    curl -o "/opt/gatling/user-files/lib/converter-moshi-2.9.0.jar" \
+    https://repo1.maven.org/maven2/com/squareup/retrofit2/converter-moshi/2.9.0/converter-moshi-2.9.0.jar &&\
+    curl -o "/opt/gatling/user-files/lib/kotlin-stdlib-1.9.20.jar" \
+    https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.9.20/kotlin-stdlib-1.9.20.jar &&\
+    curl -o "/opt/gatling/user-files/lib/logging-interceptor-4.10.0.jar" \
+    https://repo1.maven.org/maven2/com/squareup/okhttp3/logging-interceptor/4.10.0/logging-interceptor-4.10.0.jar &&\
+    curl -o "/opt/gatling/user-files/lib/moshi-1.8.0.jar" \
+    https://repo1.maven.org/maven2/com/squareup/moshi/moshi/1.8.0/moshi-1.8.0.jar &&\
+    curl -o "/opt/gatling/user-files/lib/okhttp-4.10.0.jar" \
+    https://repo1.maven.org/maven2/com/squareup/okhttp3/okhttp/4.10.0/okhttp-4.10.0.jar &&\
+    curl -o "/opt/gatling/user-files/lib/okio-jvm-3.6.0.jar" \
+    https://repo1.maven.org/maven2/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0.jar &&\
+    curl -o "/opt/gatling/user-files/lib/retrofit-2.9.0.jar" \
+    https://repo1.maven.org/maven2/com/squareup/retrofit2/retrofit/2.9.0/retrofit-2.9.0.jar
 
 COPY /conf/. /opt/gatling/conf
 COPY /resources/. /opt/gatling/user-files/resources
 COPY /simulations/. /opt/gatling/user-files/simulations
-COPY /lib/. /opt/gatling/user-files/lib
+#COPY /lib/. /opt/gatling/user-files/lib
 COPY entrypoint.sh /
-
-RUN ls /opt/gatling/user-files/lib
 
 # change context to gatling directory
 WORKDIR  /opt/gatling
