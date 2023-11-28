@@ -1,6 +1,6 @@
 package eshop.requests
 
-import eshop.utils.Randomizer
+import eshop.utils.{DbClient, Randomizer, RequestManipulator}
 import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
 import io.gatling.http.Predef._
@@ -21,7 +21,7 @@ object UpdateQuantity {
           + session("selectedProductId").as[String]
           + ")].quantity").is(session => session("quantity").as[String])
       )
-  )
+  ).exec(DbClient.writeMetricWriter("parameterizedscenario", requestName))
 
   val headers_general = Map(
     HttpHeaderNames.ContentType -> HttpHeaderValues.ApplicationJson,
@@ -29,10 +29,12 @@ object UpdateQuantity {
   )
 
   private def updateQuantityHttpRqBuilder(requestName: String): HttpRequestBuilder =
-    http(requestName)
-      .post("/eshop/control/cart/updatequantity")
-      .body(ElFileBody("requests/json/updateQuantity.json")).asJson
-      .headers(headers_general)
+    RequestManipulator.saveStatusCodeAndResponseBody (
+      http(requestName)
+        .post("/eshop/control/cart/updatequantity")
+        .body(ElFileBody("requests/json/updateQuantity.json")).asJson
+        .headers(headers_general)
+    )
 
   private def setSessionVariables(): ChainBuilder = exec(
     session =>
@@ -40,12 +42,4 @@ object UpdateQuantity {
         .set("quantity", Randomizer.getInt(2, 10))
         .set("selectedProductId", Randomizer.getIntFromSeq(session("productsInCart").as[Seq[Int]]))
   )
-  /*
-    .exec(
-    session => {
-       println("selectedProductId: " + session("selectedProductId").as[String])
-       println("quantity: " + session("quantity").as[String])
-      session
-    })
-  */
 }

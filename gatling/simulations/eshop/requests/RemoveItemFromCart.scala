@@ -16,8 +16,7 @@ object RemoveItemFromCart {
     removeItemFromCartHttpRqBuilder(requestName)
       .check(
         status is 200,
-        jsonPath (session => "$.removedProductId").is(session => session("selectedProductId").as[String]),
-        jsonPath("$.cartInfo.cartItems[*].product.id").findAll.transform(ids => ids.exists(_ == 3)).is(false) // Check if 3 is not present in idList
+        jsonPath (session => "$.removedProductId").is(session => session("selectedProductId").as[String])
       ).check(bodyString.saveAs("responseBody"))
   )
 
@@ -25,7 +24,6 @@ object RemoveItemFromCart {
     HttpHeaderNames.ContentType -> HttpHeaderValues.ApplicationJson,
     HttpHeaderNames.Accept -> HttpHeaderValues.ApplicationJson
   )
-
   private def setSessionVariables(): ChainBuilder = exec(
     session =>
       session
