@@ -1,6 +1,5 @@
 package eshop.requests
 
-//import eshop.utils.{JsonFormatter, Randomizer, InfluxDBUtils}
 import eshop.utils.{JsonFormatter, Randomizer}
 import io.gatling.core.Predef.{jsonPath, _}
 import io.gatling.core.structure.ChainBuilder
@@ -19,29 +18,12 @@ object RemoveItemFromCart {
         status is 200,
         jsonPath (session => "$.removedProductId").is(session => session("selectedProductId").as[String])
       ).check(bodyString.saveAs("responseBody"))
-    )
+  )
 
   val headers_general: Map[CharSequence, String] = Map(
     HttpHeaderNames.ContentType -> HttpHeaderValues.ApplicationJson,
     HttpHeaderNames.Accept -> HttpHeaderValues.ApplicationJson
   )
-
-//  private def writeErrorToInfluxDB(): ChainBuilder = {
-//    exec({
-//      doIf(session => session("statusCode").as[Int] != 200) {
-//        exec(session => {
-//          val statusCode = session("statusCode").as[Int]
-//          val responseMessage = session("yourHeader").as[String]
-//          val requestHeaders = session("yourHeader").as[String].split(";").map(kv => {
-//            val pair = kv.split(":")
-//            pair(0) -> pair(1)
-//          }).toMap
-//          InfluxDBUtils.writeData(statusCode, responseMessage, requestHeaders)
-//          session
-//        })
-//      }
-//    })
-//  }
   private def setSessionVariables(): ChainBuilder = exec(
     session =>
       session
