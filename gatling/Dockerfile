@@ -21,18 +21,19 @@ RUN apt-get -y update && apt-get upgrade -y && \
     rsync -av /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
     rm -rf /tmp/*
 # Install InfluxDB Java client library
-RUN mkdir -p /opt/gatling/lib && \
-    curl -o "/opt/gatling/lib/influxdb-java-2.23.jar" \
-    https://repo1.maven.org/maven2/org/influxdb/influxdb-java/2.23/influxdb-java-2.23.jar \
-    curl -o "/opt/gatling/lib/influxdb-client-java-6.6.0.jar" \
-    https://repo1.maven.org/maven2/com/influxdb/influxdb-client-java/6.6.0/influxdb-client-java-6.6.0.jar
-
-RUN ls /opt/gatling/lib
+#RUN mkdir -p /opt/gatling/lib && \
+#    curl -o "/opt/gatling/lib/influxdb-java-2.23.jar" \
+#    https://repo1.maven.org/maven2/org/influxdb/influxdb-java/2.23/influxdb-java-2.23.jar \
+#    curl -o "/opt/gatling/lib/influxdb-client-java-6.6.0.jar" \
+#    https://repo1.maven.org/maven2/com/influxdb/influxdb-client-java/6.6.0/influxdb-client-java-6.6.0.jar
 
 COPY /conf/. /opt/gatling/conf
 COPY /resources/. /opt/gatling/user-files/resources
 COPY /simulations/. /opt/gatling/user-files/simulations
+COPY /lib/. /opt/gatling/user-files/lib
 COPY entrypoint.sh /
+
+RUN ls /opt/gatling/user-files/lib
 
 # change context to gatling directory
 WORKDIR  /opt/gatling

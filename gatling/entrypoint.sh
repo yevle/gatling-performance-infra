@@ -6,4 +6,4 @@
 #echo "JVM Arguments: ${JAVA_OPTS}"
 #export JAVA_OPTS
 
-bash gatling.sh -sf /opt/gatling/user-files -rf ${WORKSPACE}/results -rm local -s ${SIMULATION} -cp /opt/gatling/lib/*
+bash gatling.sh -sf /opt/gatling/user-files -rf ${WORKSPACE}/results -rm local -s ${SIMULATION}

@@ -20,6 +20,6 @@ object DbClient {
       session("statusCode").as[Int] != 200
     }) {
       metricWriter.writeError(influxDB, testName, requestName)
-    }.exitHere
+    }
   }
 }
