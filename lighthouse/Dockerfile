@@ -18,10 +18,4 @@ COPY .env .env
 COPY test.js test.js
 COPY src src
 RUN mkdir report
-# CMD curl node -v
 RUN npm install 
-# COPY . .
-# RUN chmod +x lighthouse/entrypoint1.sh
-
-# ENTRYPOINT [ "/lighthouse/entrypoint1.sh" ]
-# CMD [ "node", "src/test.js" ]

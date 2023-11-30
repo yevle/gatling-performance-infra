@@ -12,6 +12,7 @@ Framework consists of next services:
 - **Influxdb**: time series DB platform for metrics & events (Time Series Data)
 - **Jenkins**: continuous integration server for tests execution
 - **Gatling**: tool for backend load testing
+- **Lighthouse**: tool for ui performance testing
 - **Prometheus**: time series DB platform for storing Host (Docker) metrics. Depends on:
 - **cAdvisor**: analyzes and exposes resource usage and performance data from running containers
 
