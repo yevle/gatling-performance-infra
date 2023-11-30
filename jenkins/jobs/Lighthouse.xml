@@ -1,0 +1,64 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+    <actions />
+    <description>Running UI Performance tests with Lighthouse</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <org.jenkinsci.plugins.compressbuildlog.BuildLogCompressor plugin="compress-buildlog@1.2" />
+        <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@320.v5a_0933a_e7d61">
+            <autoRebuild>false</autoRebuild>
+            <rebuildDisabled>false</rebuildDisabled>
+        </com.sonyericsson.rebuild.RebuildSettings>
+
+    </properties>
+    <scm class="hudson.scm.NullSCM" />
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers />
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>
+                if docker container ls -a| grep lighthouse;
+                then
+                docker container stop lighthouse
+                docker container rm lighthouse
+                fi
+            </command>
+            <configuredLocalRules />
+        </hudson.tasks.Shell>
+        <hudson.tasks.Shell>
+            <command>
+                docker run --name lighthouse \
+                --net=host --volumes-from=jenkins gatling-performance-infra-lighthouse \
+                node test.js
+            </command>
+            <configuredLocalRules />
+        </hudson.tasks.Shell>
+    </builders>
+    <publishers>
+        <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.9">
+            <tasks>
+                <hudson.plugins.postbuildtask.TaskProperties>
+                    <logTexts>
+                        <hudson.plugins.postbuildtask.LogProperties>
+                            <logText>Test run complete!</logText>
+                            <operator>OR</operator>
+                        </hudson.plugins.postbuildtask.LogProperties>
+                    </logTexts>
+                    <EscalateStatus>false</EscalateStatus>
+                    <RunIfJobSuccessful>false</RunIfJobSuccessful>
+                    <script>
+                        docker cp lighthouse:/lighthouse/report/ .
+                        docker cp . jenkins:/var/jenkins_home/workspace/Lighthouse/
+                        docker rm lighthouse
+                    </script>
+                </hudson.plugins.postbuildtask.TaskProperties>
+            </tasks>
+        </hudson.plugins.postbuildtask.PostbuildTask>
+
+    </publishers>
+    <buildWrappers />
+</project>
