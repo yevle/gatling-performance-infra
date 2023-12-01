@@ -9,11 +9,11 @@ async function auditMainPage() {
     assert(await mainPage.isPageOpened(), 'Open main page')
     await flow.navigate(mainPage.getUrl())
 
-    let loginPage = mainPage.clickLoginLink()
-    assert((await loginPage).isPageOpened(), 'Open login page')
-    await flow.navigate((await loginPage).getUrl())
+    let loginPage = await mainPage.clickLoginLink()
+    assert(await loginPage.isPageOpened(), 'Open login page')
+    await flow.navigate(await loginPage.getUrl())
 
-    await endSessionWithReport(flow, true)
+    await endSessionWithReport(flow, false)
 }
 
 async function executeTests() {

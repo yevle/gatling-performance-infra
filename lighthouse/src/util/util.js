@@ -16,10 +16,17 @@ export async function generatReport(flow, writeToDb = true) {
         await writeFlowResultToInFluxDB(result)
         // await writeFlowResultToInFluxDBv2(result)
     }
-    // const jsonRep = generateReport(result, 'json')
-    const htmlRep = generateReport(result, 'html')
-    // fs.writeFileSync(`${process.cwd()}/report/lhreport-${date.getTime()}.json`, jsonRep);
-    fs.writeFileSync(`${process.cwd()}/report/lhreport-${date.getTime()}.html`, htmlRep);
+
+    if (!fs.existsSync(`${process.cwd()}/report`)) {
+        fs.mkdirSync(`${process.cwd()}/report`)
+    }
+    if (!fs.existsSync(`${process.cwd()}/report/${date}`)) {
+        fs.mkdirSync(`${process.cwd()}/report/${date}`)
+    }
+
+    await generateJsonReport(result, date)
+    await generateHtmlReport(result, date)
+
 }
 
 // async function writeFlowResultToInFluxDBv2(result) {
@@ -42,5 +49,33 @@ async function writeFlowResultToInFluxDB(result) { //to do Map
             await writeCategoryScoresToInflux('navigation-audit', category, url, categoryScore)
         })
         metrics.forEach(async metric => await writeMetricsToInflux('performance', metric, url, step.lhr.audits[metric].numericValue))
+    })
+}
+
+async function generateJsonReport(result, date) {
+    const jsonRep = generateReport(result, 'json')
+    fs.writeFileSync(`${process.cwd()}/report/${date}/summary.json`, jsonRep);
+
+    const steps = result.steps
+    await steps.forEach(async step => {
+        const stepReport = generateReport(step.lhr, 'json')
+        const url = step.lhr.finalUrl
+        const newUrl = url.replace(/\//g, "|")
+
+        fs.writeFileSync(`${process.cwd()}/report/${date}/${newUrl}.json`, stepReport)
+    })
+}
+
+async function generateHtmlReport(result, date) {
+    const htmlRep = generateReport(result, 'html')
+    fs.writeFileSync(`${process.cwd()}/report/${date}/summary.html`, htmlRep);
+
+    const steps = result.steps
+    await steps.forEach(async step => {
+        const stepReport = generateReport(step.lhr, 'html')
+        const url = step.lhr.finalUrl
+        const newUrl = url.replace(/\//g, ".")
+
+        fs.writeFileSync(`${process.cwd()}/report/${date}/${newUrl}.html`, stepReport)
     })
 }
