@@ -13,6 +13,7 @@ async function auditMainPage() {
     assert(await loginPage.isPageOpened(), 'Open login page')
     await flow.navigate(await loginPage.getUrl())
 
+    // Send 'html' or 'json' as report type parameter
     await endSessionWithReport(flow, false)
 }
 

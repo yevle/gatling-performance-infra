@@ -31,8 +31,7 @@ export async function startUserFlow(
     })
     return flow
 }
-
 export async function endSessionWithReport(flow, writeToDb = true) {
-    await util.generatReport(flow, writeToDb)
+    await util.generateReportWriteMetrics(flow, writeToDb)
     await flow._page.browser().close()
 }
