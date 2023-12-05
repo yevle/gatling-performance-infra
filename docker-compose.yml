@@ -114,7 +114,6 @@ services:
   lighthouse:
     container_name: lighthouse
     build: ./lighthouse
-    platform: linux/amd64
     depends_on:
       - influxdb
     volumes:
