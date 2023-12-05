@@ -11,7 +11,7 @@ export async function generateReportWriteMetrics(flow, writeToDb = true) {
     let date = new Date().getTime()
     const result = await flow.createFlowResult()
 
-    if (writeToDb) {
+    if (`${process.env.WRITE_TO_DB}`) {
         await writeMetricsToInfluxDb(result)
     }
     if (!fs.existsSync(`${process.cwd()}/report`)) {

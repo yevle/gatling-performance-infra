@@ -1,37 +1,27 @@
 import { startFlow, desktopConfig, generateReport } from 'lighthouse'
 import puppeteer from 'puppeteer'
 import * as util from '../util/util.js'
+import fs from 'fs'
 
-export async function startBrowser(browserOptions = undefined, url) {
+const browserOptionsStr = fs.readFileSync(`${process.cwd()}/resources/browser-options.json`).toString()
+const browserOptions = JSON.parse(browserOptionsStr)
+browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
+
+export async function startBrowser(url) {
     const browser = await puppeteer.launch(browserOptions)
     const page = await browser.newPage()
     await page.goto(url)
     return page
 }
-export async function startUserFlow(
-    { browserOptions = {
-        headless: 'new', args: ['--start-maximized', '--no-sandbox']
-    },
-        url }
-) {
-    const page = await startBrowser(browserOptions, url)
-    const flow = await startFlow(page, {
-        config: desktopConfig
-        // {
-        //     extends: 'lighthouse:default',
-        //     settings: {
-        //         formFactor: 'desktop',
-        //         screenEmulation: { disabled: true },
-        //         output: ['json']
-        //         //   throttling: constants.throttling.desktopDense4G,
-        //         //   screenEmulation: constants.screenEmulationMetrics.desktop,
-        //         //   emulatedUserAgent: constants.userAgents.desktop,
-        //     }
-        // }
-    })
+
+export async function startUserFlow({ url }) {
+    const page = await startBrowser(url)
+    const flow = await startFlow(page, {config: desktopConfig})
     return flow
 }
-export async function endSessionWithReport(flow, writeToDb = true) {
-    await util.generateReportWriteMetrics(flow, writeToDb)
+
+export async function endSessionWithReport(flow) {
+    await util.generateReportWriteMetrics(flow)
+
     await flow._page.browser().close()
 }
