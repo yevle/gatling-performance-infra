@@ -8,11 +8,11 @@ import { writeMetricsToInflux, writeCategoryScoresToInflux } from './influxdb.js
 export const envConfig = dotenv.config({ path: `${process.cwd()}/.env`, override: true }); // to run with jenkins
 expand(envConfig);
 
-export async function generatReport(flow, writeToDb = true) {
+export async function generatReport(flow) {
     let date = new Date()
     const result = await flow.createFlowResult()
 
-    if (writeToDb) {
+    if (`${process.env.WRITE_TO_DB}`) {
         await writeFlowResultToInFluxDB(result)
         // await writeFlowResultToInFluxDBv2(result)
     }
