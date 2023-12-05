@@ -7,11 +7,11 @@ import { writeMetricsToInflux, writeCategoryScoresToInflux } from './influxdb.js
 export const envConfig = dotenv.config({ path: `${process.cwd()}/.env`, override: true });
 expand(envConfig);
 
-export async function generateReportWriteMetrics(flow, writeToDb = true) {
+export async function generateReportWriteMetrics(flow) {
     let date = new Date().getTime()
     const result = await flow.createFlowResult()
 
-    if (`${process.env.WRITE_TO_DB}`) {
+    if (process.env.WRITE_TO_DB) {
         await writeMetricsToInfluxDb(result)
     }
     if (!fs.existsSync(`${process.cwd()}/report`)) {
@@ -48,8 +48,7 @@ async function generateReportOfType(result, date) {
     await steps.forEach(async step => {
         const stepReport = generateReport(step.lhr, reportType)
         const url = step.lhr.finalUrl
-        const newUrl = url.replace(/\//g, ".")
-
-        fs.writeFileSync(`${process.cwd()}/report/${date}/${newUrl}.${reportType}`, stepReport)
+        const reportName = url.replace(/\//g, ".")
+        fs.writeFileSync(`${process.cwd()}/report/${date}/${reportName}.${reportType}`, stepReport)
     })
 }

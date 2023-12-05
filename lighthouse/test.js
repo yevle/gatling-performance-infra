@@ -4,7 +4,8 @@ import { endSessionWithReport, startUserFlow } from "./src/session/session.js";
 import assert from "assert";
 
 async function auditMainPage() {
-    const flow = await startUserFlow({ url: process.env.MAIN_PAGE })
+    const url = process.env.MAIN_PAGE
+    const flow = await startUserFlow(url)
     let mainPage = new MainPage(flow)
     assert(await mainPage.isPageOpened(), 'Open main page')
     await flow.navigate(mainPage.getUrl())

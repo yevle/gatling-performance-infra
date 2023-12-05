@@ -1,4 +1,4 @@
-import { startFlow, desktopConfig, generateReport } from 'lighthouse'
+import { startFlow, desktopConfig} from 'lighthouse'
 import puppeteer from 'puppeteer'
 import * as util from '../util/util.js'
 import fs from 'fs'
@@ -14,9 +14,9 @@ export async function startBrowser(url) {
     return page
 }
 
-export async function startUserFlow({ url }) {
+export async function startUserFlow(url) {
     const page = await startBrowser(url)
-    const flow = await startFlow(page, {config: desktopConfig})
+    const flow = await startFlow(page, { config: desktopConfig })
     return flow
 }
 
