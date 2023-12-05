@@ -13,13 +13,20 @@ object DbClient {
 
   val influxDB: InfluxDB = InfluxDBFactory.connect(url, username, password)
   influxDB.setDatabase(database)
-  val metricWriter = new WriteMetricToInfluxDB()
+  val simulationName: String =
+    PropertyConfigurator.getProperty("SIMULATION", "eshop.ParameterizedScenario")
+      .split('.')
+      .lastOption
+      .getOrElse("")
+      .toLowerCase()
 
-  def writeMetricWriter(testName: String, requestName: String): ChainBuilder = {
+  val metricWriter = new WriteMetricToInfluxDB(simulationName)
+
+  def writeMetricWriter(requestName: String): ChainBuilder = {
     doIf(session => {
       session("statusCode").as[Int] != 200
     }) {
-      metricWriter.writeError(influxDB, testName, requestName)
+      metricWriter.writeError(influxDB, requestName)
     }
   }
 }

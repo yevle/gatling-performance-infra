@@ -79,6 +79,37 @@ fi</command>
     <io.gatling.jenkins.GatlingPublisher plugin="gatling@1.3.0">
       <enabled>true</enabled>
     </io.gatling.jenkins.GatlingPublisher>
+
+    <org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildRecorder plugin="groovy-postbuild@2.4">
+    <script plugin="script-security@1.44">
+      <script>
+        import hudson.model.*
+        //get current build
+        def build = Thread.currentThread().executable
+        def grafana_url = System.getenv(&quot;JENKINS_GRAFANA_URL&quot;)
+        if(!grafana_url){
+        println &apos;JENKINS_GRAFANA_URL is not specified&apos;
+        grafana_url = &quot;127.0.0.1:8857&quot;
+        }
+        // grafana url for aggregate dashboard - replace time stamp with %s
+        def perfResult = &quot;http://%s/dashboard/db/load-test-monitoring?from=%s&amp;to=%s&quot;
+        // get build start and end time
+        def start = build.getStartTimeInMillis();
+        def end = start + build.getExecutor().getElapsedTime();
+        // replace time
+        perfResult = String.format(perfResult, grafana_url, start, end);
+        //build the string to be added as description.
+        def link = &quot;&lt;a href=&apos;%s&apos;&gt;%s&lt;/a&gt;&lt;br/&gt;&quot;;
+        def sb = new StringBuilder();
+        sb.append(String.format(link, perfResult, &quot;Grafana Performance Result&quot;))
+        // set build description
+        build.setDescription(sb.toString());
+      </script>
+      <sandbox>false</sandbox>
+    </script>
+    <behavior>1</behavior>
+    <runForMatrixParent>false</runForMatrixParent>
+  </org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildRecorder>
   </publishers>
   <buildWrappers/>
 </project>

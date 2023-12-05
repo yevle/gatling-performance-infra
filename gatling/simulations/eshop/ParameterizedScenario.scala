@@ -1,9 +1,10 @@
 package eshop
 
 import eshop.chains.OrderCreationChain
-import eshop.utils.Configurator
-import eshop.utils.ScenarioInjector
+import eshop.utils.PropertyConfigurator.getProperty
+import eshop.utils.{Configurator, ScenarioInjector, SlackNotificator}
 import io.gatling.core.Predef._
+import io.gatling.core.scenario.Simulation
 import io.gatling.core.structure.ScenarioBuilder
 import io.gatling.http.Predef._
 import io.gatling.http.protocol.HttpProtocolBuilder
@@ -12,13 +13,12 @@ class ParameterizedScenario extends Simulation{
   private val httpConf: HttpProtocolBuilder = http
     .baseUrl(Configurator.url)
 
-  private val orderCreation_OpenScenario: ScenarioBuilder =
-    {
+  private val orderCreation_OpenScenario: ScenarioBuilder = {
       scenario("OrderCreation_Scenario_OpenModel")
         .during(testDuration)(OrderCreationChain.execute)
     }
   before(
-    println(s"userCount: $userCount\nrampUpDuration: $rampUpDuration\ntestDuration: $testDuration")
+    println(s"userCount: $userCount\nrampUpDuration: $rampUpDuration\ntestDuration: $testDuration\nsimName: $testName")
   )
 
   def userCount: Int = getProperty("USERS", Configurator.usersCount.toString).toInt
@@ -27,11 +27,7 @@ class ParameterizedScenario extends Simulation{
 
   def testDuration: Int = getProperty("TEST_DURATION", Configurator.testDurationSeconds.toString).toInt
 
-  private def getProperty(propertyName: String, defaultValue: String) = {
-    Option(System.getenv(propertyName))
-      .orElse(Option(System.getProperty(propertyName)))
-      .getOrElse(defaultValue)
-  }
+  def testName: String = getProperty("SIMULATION", "default value")
 
 
   private val asserts = Seq(
@@ -39,8 +35,12 @@ class ParameterizedScenario extends Simulation{
   )
 
   setUp(
-    orderCreation_OpenScenario.inject(ScenarioInjector.injectOpenModel(userCount, rampUpDuration))
-  )
-    .assertions(asserts)
-    .protocols(httpConf)
+    SlackNotificator.sendNotificationAboutStart()
+      .inject(atOnceUsers(1))
+      .protocols(SlackNotificator.getSlackHTTPProtocol),
+    orderCreation_OpenScenario
+      .inject(ScenarioInjector.injectOpenModel(userCount, rampUpDuration))
+      .protocols(httpConf)
+  ).assertions(asserts)
+
 }
