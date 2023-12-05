@@ -1,6 +1,7 @@
 import { startFlow, desktopConfig} from 'lighthouse'
 import puppeteer from 'puppeteer'
 import * as util from '../util/util.js'
+import { sendMsg } from '../util/slack.js'
 import fs from 'fs'
 
 const browserOptionsStr = fs.readFileSync(`${process.cwd()}/resources/browser-options.json`).toString()
@@ -15,9 +16,14 @@ export async function startBrowser(url) {
 }
 
 export async function startUserFlow(url) {
+    try{
     const page = await startBrowser(url)
     const flow = await startFlow(page, { config: desktopConfig })
+    await sendMsg('UI testing began!')
     return flow
+    }catch(error){
+        await sendMsg('Something went wrong, failed to start Ui testing!')
+    }
 }
 
 export async function endSessionWithReport(flow) {

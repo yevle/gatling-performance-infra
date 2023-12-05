@@ -3,24 +3,29 @@ import dotenv from 'dotenv'
 import { expand } from 'dotenv-expand';
 import { generateReport } from 'lighthouse';
 import { writeMetricsToInflux, writeCategoryScoresToInflux } from './influxdb.js';
+import { sendHtmlReport } from './slack.js';
 
 export const envConfig = dotenv.config({ path: `${process.cwd()}/.env`, override: true });
 expand(envConfig);
 
+const date = new Date().getTime()
+const allReportsDir=`${process.cwd()}/report`
+const reportDir=`${allReportsDir}/${date}`
+const reportType = `${process.env.REPORT_TYPE}`
+
 export async function generateReportWriteMetrics(flow) {
-    let date = new Date().getTime()
     const result = await flow.createFlowResult()
 
     if (process.env.WRITE_TO_DB) {
         await writeMetricsToInfluxDb(result)
     }
-    if (!fs.existsSync(`${process.cwd()}/report`)) {
-        fs.mkdirSync(`${process.cwd()}/report`)
+    if (!fs.existsSync(allReportsDir)) {
+        fs.mkdirSync(allReportsDir)
     }
-    if (!fs.existsSync(`${process.cwd()}/report/${date}`)) {
-        fs.mkdirSync(`${process.cwd()}/report/${date}`)
+    if (!fs.existsSync(reportDir)) {
+        fs.mkdirSync(reportDir)
     }
-    await generateReportOfType(result, date)
+    await generateReports(result)
 }
 
 async function writeMetricsToInfluxDb(result) {
@@ -30,7 +35,6 @@ async function writeMetricsToInfluxDb(result) {
 
     await steps.forEach(async step => {
         const url = step.lhr.finalUrl
-
         categories.forEach(async category => {
             const categoryScore = step.lhr.categories[category].score
             await writeCategoryScoresToInflux('navigation-audit', category, url, categoryScore)
@@ -39,16 +43,30 @@ async function writeMetricsToInfluxDb(result) {
     })
 }
 
-async function generateReportOfType(result, date) {
-    const reportType = `${process.env.REPORT_TYPE}`
-    const jsonRep = generateReport(result, reportType)
-    fs.writeFileSync(`${process.cwd()}/report/${date}/summary.${reportType}`, jsonRep);
+async function generateReports(result) {
+    await generateSummaryReport(result)
+    await generateReportForEachStep(result)
+}
 
+async function generateSummaryReport(result) {
+    const reportPath = `${reportDir}/summary.${reportType}`
+    const summaryReport = generateReport(result, reportType)
+    fs.writeFileSync(reportPath, summaryReport);
+
+    const report ={}
+    report.path = reportPath
+    report.comment = 'Test run finished.'
+    report.title = `summary-${date}.${reportType}`
+    await sendHtmlReport(report)
+}
+
+async function generateReportForEachStep(result) {
     const steps = result.steps
     await steps.forEach(async step => {
         const stepReport = generateReport(step.lhr, reportType)
         const url = step.lhr.finalUrl
         const reportName = url.replace(/\//g, ".")
-        fs.writeFileSync(`${process.cwd()}/report/${date}/${reportName}.${reportType}`, stepReport)
+        fs.writeFileSync(`${reportDir}/${reportName}.${reportType}`, stepReport)
     })
 }
+
