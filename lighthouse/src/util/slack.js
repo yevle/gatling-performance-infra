@@ -3,11 +3,13 @@ import fs from 'fs'
 
 export async function sendMsg(message) {
     const slack = new WebClient(process.env.SLACK_TOKEN)
+    // await joinChannel('C0691PL21CH')
     await slack.chat.postMessage({ text: message, channel: `${process.env.APP_CHANNEL_ID}` })
     await slack.chat.postMessage({ text: message, channel: `${process.env.ADDITIONAL_CHANNEL_ID}` })
 }
 
 async function joinChannel(channelId) {
+    const slack = new WebClient(process.env.SLACK_TOKEN)
     await slack.conversations.join({ channel: channelId })
 }
 
