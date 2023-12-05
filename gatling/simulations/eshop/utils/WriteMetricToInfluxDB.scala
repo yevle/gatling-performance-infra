@@ -11,7 +11,7 @@ class WriteMetricToInfluxDB(simulationName: String) {
 
   def writeError(influxdb: InfluxDB, requestName: String): ChainBuilder = {
     exec(session => {
-      val measurementName = s"gatling.$simulationName.$requestName.error"
+      val measurementName = "gatling"
       val fieldName = "value"
       val statusCode = session("statusCode").as[Int]
       val responseBody = session("responseBody").as[String]
@@ -22,12 +22,21 @@ class WriteMetricToInfluxDB(simulationName: String) {
   }
 
   private def writeToInfluxDB(requestName: String, fieldValue: String, measurementName: String, fieldName: String, influxdb: InfluxDB): Unit = {
-    val point = Point.measurement(measurementName)
+    val singleRequest = Point.measurement(measurementName)
       .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-      .tag("test_name", simulationName)
-      .tag("request_name", requestName)
+      .tag("testName", simulationName)
+      .tag("requestName", requestName)
       .addField(fieldName, fieldValue)
       .build()
-    influxdb.write(point)
+    val allRequests = Point.measurement(measurementName)
+      .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+      .tag("testName", simulationName)
+      .tag("requestName", "allRequests")
+      .addField(fieldName, fieldValue)
+      .addField("requestValue", requestName)
+      .build()
+
+    influxdb.write(singleRequest)
+    influxdb.write(allRequests)
   }
 }
