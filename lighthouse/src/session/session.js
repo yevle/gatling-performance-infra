@@ -13,6 +13,7 @@ export async function startBrowser(url) {
     await page.goto(url)
     return page
 }
+
 export async function startUserFlow({ url }) {
     const page = await startBrowser(url)
     const flow = await startFlow(page, {config: desktopConfig})
@@ -20,6 +21,7 @@ export async function startUserFlow({ url }) {
 }
 
 export async function endSessionWithReport(flow) {
-    await util.generatReport(flow)
+    await util.generateReportWriteMetrics(flow)
+
     await flow._page.browser().close()
 }
