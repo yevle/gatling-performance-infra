@@ -3,14 +3,14 @@ import dotenv from 'dotenv'
 import { expand } from 'dotenv-expand';
 import { generateReport } from 'lighthouse';
 import { writeMetricsToInflux, writeCategoryScoresToInflux } from './influxdb.js';
-import { sendHtmlReport } from './slack.js';
+import { sendHtmlReport, sendReportUrl } from './slack.js';
 
 export const envConfig = dotenv.config({ path: `${process.cwd()}/.env`, override: true });
 expand(envConfig);
 
 const date = new Date().getTime()
-const allReportsDir=`${process.cwd()}/report`
-const reportDir=`${allReportsDir}/${date}`
+const allReportsDir = `${process.cwd()}/report`
+const reportDir = `${allReportsDir}/${date}`
 const reportType = `${process.env.REPORT_TYPE}`
 
 export async function generateReportWriteMetrics(flow) {
@@ -19,12 +19,8 @@ export async function generateReportWriteMetrics(flow) {
     if (process.env.WRITE_TO_DB) {
         await writeMetricsToInfluxDb(result)
     }
-    if (!fs.existsSync(allReportsDir)) {
-        fs.mkdirSync(allReportsDir)
-    }
-    if (!fs.existsSync(reportDir)) {
-        fs.mkdirSync(reportDir)
-    }
+
+    createReportDirectories()
     await generateReports(result)
 }
 
@@ -49,15 +45,17 @@ async function generateReports(result) {
 }
 
 async function generateSummaryReport(result) {
-    const reportPath = `${reportDir}/summary.${reportType}`
+    const reportPath = `${reportDir}/summary-${date}.${reportType}`
     const summaryReport = generateReport(result, reportType)
     fs.writeFileSync(reportPath, summaryReport);
 
-    const report ={}
-    report.path = reportPath
-    report.comment = 'Test run finished.'
-    report.title = `summary-${date}.${reportType}`
-    await sendHtmlReport(report)
+    const report = {
+        path: reportPath,
+        comment: 'Test run complete.',
+        title: `summary-${date}.${reportType}`
+    }
+
+    await sendReportSummary(report)
 }
 
 async function generateReportForEachStep(result) {
@@ -70,3 +68,21 @@ async function generateReportForEachStep(result) {
     })
 }
 
+async function sendReportSummary(report) {
+    if (process.env.SEND_REPORT_LINK) {
+        const reportUrl = `${process.env.NGINX_HOST}/report/${date}/${report.title}`
+        await sendReportUrl(reportUrl)
+    }
+    if (process.env.SEND_HTML_REPORT) {
+        await sendHtmlReport(report)
+    }
+}
+
+function createReportDirectories() {
+    if (!fs.existsSync(allReportsDir)) {
+        fs.mkdirSync(allReportsDir)
+    }
+    if (!fs.existsSync(reportDir)) {
+        fs.mkdirSync(reportDir)
+    }
+}

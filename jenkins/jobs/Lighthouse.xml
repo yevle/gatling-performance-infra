@@ -53,6 +53,7 @@
                     <script>
                         docker cp lighthouse:/lighthouse/report/ .
                         docker cp . jenkins:/var/jenkins_home/workspace/Lighthouse/
+                        docker cp . nginx:/usr/share/nginx/html/
                         docker rm lighthouse
                     </script>
                 </hudson.plugins.postbuildtask.TaskProperties>

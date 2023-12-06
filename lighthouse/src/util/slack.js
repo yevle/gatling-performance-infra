@@ -3,7 +3,7 @@ import fs from 'fs'
 
 export async function sendMsg(message) {
     const slack = new WebClient(process.env.SLACK_TOKEN)
-    // await joinChannel('C0691PL21CH')
+    // await joinChannel(`${process.env.ADDITIONAL_CHANNEL_ID}`)
     await slack.chat.postMessage({ text: message, channel: `${process.env.APP_CHANNEL_ID}` })
     await slack.chat.postMessage({ text: message, channel: `${process.env.ADDITIONAL_CHANNEL_ID}` })
 }
@@ -11,6 +11,11 @@ export async function sendMsg(message) {
 async function joinChannel(channelId) {
     const slack = new WebClient(process.env.SLACK_TOKEN)
     await slack.conversations.join({ channel: channelId })
+}
+
+export async function sendReportUrl(reportURL){
+    const slack = new WebClient(process.env.SLACK_TOKEN)
+    await slack.chat.postMessage({ text: reportURL, channel: `${process.env.APP_CHANNEL_ID}` })
 }
 
 export async function sendHtmlReport(report) {
