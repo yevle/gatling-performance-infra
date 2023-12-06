@@ -1,13 +1,10 @@
 import fs from 'fs'
-import dotenv from 'dotenv'
-import { expand } from 'dotenv-expand';
 import { generateReport } from 'lighthouse';
 import { writeMetricsToInflux, writeCategoryScoresToInflux } from './influxdb.js';
 import { sendHtmlReport, sendReportUrl } from './slack.js';
-
-export const envConfig = dotenv.config({ path: `${process.cwd()}/.env`, override: true });
-expand(envConfig);
-
+import dotenv from 'dotenv'
+dotenv.config({ path: `${process.cwd()}/.env`})
+ 
 const date = new Date().getTime()
 const allReportsDir = `${process.cwd()}/report`
 const reportDir = `${allReportsDir}/${date}`

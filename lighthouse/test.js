@@ -3,6 +3,7 @@ import { MainPage } from "./src/page/main-page.js";
 import { endSessionWithReport, startUserFlow } from "./src/session/session.js";
 import assert from "assert";
 
+
 async function auditMainPage() {
     const url = process.env.MAIN_PAGE
     const flow = await startUserFlow(url)
