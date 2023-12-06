@@ -6,7 +6,9 @@ import io.gatling.http.Predef._
 import io.gatling.http.protocol.HttpProtocolBuilder
 
 object SlackNotificator {
-  private val startMessage = """{ "message": "Test started" }"""
+  private val startMessage = """{ "message": "Test started\n
+                               |To watch simulation stats in runtime follow the link:\n
+                               |http://127.0.0.1:8857/d/gatling/gatling-report-metrics?from=now-5m&refresh=5s" }""".stripMargin
   private val finishMessage = """{ "message": "Test finished" }"""
   private val slackMessage = """{ "message": "completed!!!" }"""
 

@@ -1145,14 +1145,10 @@
       }
     ]
   },
-  "time": {
-    "from": "2023-12-04T16:11:21.971Z",
-    "to": "2023-12-04T16:12:14.031Z"
-  },
   "timepicker": {},
   "timezone": "",
   "title": "Gatling Report Metrics",
-  "uid": "d3b3f30a-e0b8-446e-a5e2-476bb5417544",
+  "uid": "gatling",
   "version": 6,
   "weekStart": ""
 }
