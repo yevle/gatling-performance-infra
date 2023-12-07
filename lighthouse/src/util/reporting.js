@@ -50,7 +50,6 @@ async function generateSummaryReport(result) {
         comment: 'Test run complete.',
         title: `summary-${date}.${reportType}`
     }
-
     await sendReportSummary(report)
 }
 
