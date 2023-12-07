@@ -4,3 +4,5 @@
 *.iml
 .DS_Store
 /gatling/lib
+/lighthouse/node_modules
+/lighthouse/report

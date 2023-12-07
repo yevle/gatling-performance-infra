@@ -1,0 +1,7 @@
+{
+    "headless": "new",
+    "args": [
+        "--start-maximized",
+        "--no-sandbox"
+    ]
+}
