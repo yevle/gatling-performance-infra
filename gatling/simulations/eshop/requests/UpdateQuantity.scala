@@ -21,7 +21,7 @@ object UpdateQuantity {
           + session("selectedProductId").as[String]
           + ")].quantity").is(session => session("quantity").as[String])
       )
-  ).exec(DbClient.writeMetricWriter("parameterizedscenario", requestName))
+  ).exec(DbClient.writeMetricWriter(requestName))
 
   val headers_general = Map(
     HttpHeaderNames.ContentType -> HttpHeaderValues.ApplicationJson,

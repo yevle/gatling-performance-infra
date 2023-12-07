@@ -42,7 +42,6 @@ RUN mkdir -p /opt/gatling/lib && \
 COPY /conf/. /opt/gatling/conf
 COPY /resources/. /opt/gatling/user-files/resources
 COPY /simulations/. /opt/gatling/user-files/simulations
-#COPY /lib/. /opt/gatling/user-files/lib
 COPY entrypoint.sh /
 
 # change context to gatling directory

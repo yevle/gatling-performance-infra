@@ -8,6 +8,7 @@ SERVER="http://$JENKINS_HOST:$JENKINS_PORT"
 USER=$JENKINS_USER:$JENKINS_PASSWORD
 JENKINS_API="http://$JENKINS_USER:$JENKINS_PASSWORD@$JENKINS_HOST:$JENKINS_PORT";
 JENKINS_URL_CONFIG=${JENKINS_URL_CONFIG:-"http:\\/\\/127.0.0.1:8080\\/"};
+JENKINS_GRAFANA_URL="127.0.0.1:8857"
 
 bash -x /usr/local/bin/jenkins.sh &
 
@@ -33,6 +34,9 @@ echo " "
 
 echo "Move security.groovy to init.groovy.d/"
 cp /usr/share/jenkins/ref/init.groovy.d/security.groovy /var/jenkins_home/init.groovy.d/security.groovy
+
+echo "configure-markup-formatter.groovy to init.groovy.d/"
+cp /usr/share/jenkins/ref/init.groovy.d/configure-markup-formatter.groovy /var/jenkins_home/init.groovy.d/configure-markup-formatter.groovy
 
 echo "Trying to import jobs to jenkins"
 

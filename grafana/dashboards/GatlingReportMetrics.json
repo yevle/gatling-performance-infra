@@ -190,6 +190,18 @@
                 "value": 70
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "99%"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 50
+              }
+            ]
           }
         ]
       },
@@ -226,101 +238,252 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "query": "SELECT sum(\"count\") AS \"OK\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'ok') AND $timeFilter GROUP BY \"request\"",
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT sum(\"count\") AS \"OK\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'ok') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT sum(\"count\") AS \"KO\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'ko') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT sum(\"count\") AS \"KO\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'ko') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "B",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT mean(\"mean\") AS \"Mean\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"mean\") AS \"Mean\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "C",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT mean(\"percentiles50\") AS \"50%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT PERCENTILE(\"mean\", 50) AS \"50%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "D",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT mean(\"percentiles75\") AS \"75%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT PERCENTILE(\"mean\", 75) AS \"75%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "E",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT mean(\"percentiles95\") AS \"95%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT PERCENTILE(\"mean\", 95) AS \"95%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "F",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT stddev(\"mean\") AS \"Std.Dev\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT PERCENTILE(\"mean\", 99) AS \"99%\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "rawQuery": true,
+          "refId": "J",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P951FEA4DE68E13C5"
+          },
+          "groupBy": [],
+          "hide": false,
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT stddev(\"mean\") AS \"Std.Dev\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "G",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT min(\"min\") AS \"Min\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT min(\"min\") AS \"Min\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "H",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         },
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
+          "groupBy": [],
           "hide": false,
-          "query": "SELECT max(\"max\") AS \"Max\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" !~ /(?i)redirect/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"max\") AS \"Max\" FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"status\" = 'all') AND $timeFilter GROUP BY \"request\"",
           "rawQuery": true,
           "refId": "I",
-          "resultFormat": "table"
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
-      "title": "Panel Title",
+      "title": "Statistics",
       "transformations": [
         {
           "id": "joinByField",
@@ -408,7 +571,9 @@
               "Total": 1,
               "request": 0
             },
-            "renameByName": {}
+            "renameByName": {
+              "request": "Request"
+            }
           }
         }
       ],
@@ -459,6 +624,7 @@
               "mode": "off"
             }
           },
+          "fieldMinMax": false,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -478,7 +644,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "gatling.demostore.allRequests.ko.count.mean"
+              "options": "KO"
             },
             "properties": [
               {
@@ -491,17 +657,17 @@
             ]
           },
           {
+            "legend": {
+              "showLegend": false
+            },
             "matcher": {
               "id": "byName",
-              "options": "KO"
+              "options": "Active Users"
             },
             "properties": [
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-red",
-                  "mode": "fixed"
-                }
+                "id": "fieldMinMax",
+                "value": true
               }
             ]
           }
@@ -516,7 +682,9 @@
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "sum"
+          ],
           "displayMode": "list",
           "placement": "right",
           "showLegend": true
@@ -534,24 +702,10 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "gatling.demostore.allRequests.ok.count",
+          "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"count\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND  \"request\" =~ /^$request$/ AND \"status\" = 'ok') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND  \"request\" =~ /^$request$/ AND \"status\" = 'ok') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -562,10 +716,6 @@
                   "value"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -577,25 +727,11 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "hide": false,
-          "measurement": "gatling.demostore.allRequests.ko.count",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"count\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'ko') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'ko') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -606,10 +742,6 @@
                   "value"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -621,25 +753,11 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "hide": false,
-          "measurement": "gatling.demostore.users.allUsers.active",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"gatling.${scenario:raw}.users.allUsers.active\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"active\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"scenario\" = 'allUsers') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -650,10 +768,6 @@
                   "value"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -783,24 +897,10 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "gatling.demostore.allRequests.all.max",
+          "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"max\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'all') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"max\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'all') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -811,10 +911,6 @@
                   "value"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -826,25 +922,11 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "hide": false,
-          "measurement": "gatling.demostore.allRequests.all.mean",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"mean\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'all') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"mean\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'all') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -855,10 +937,6 @@
                   "value"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -870,25 +948,11 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "hide": false,
-          "measurement": "gatling.demostore.allRequests.all.min",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"min\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$scenario$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'all') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "query": "SELECT mean(\"min\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND \"request\" =~ /^$request$/ AND \"status\" = 'all') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -899,10 +963,6 @@
                   "value"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -911,6 +971,120 @@
       ],
       "title": "All Requests Response Time ($request)",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P951FEA4DE68E13C5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Request"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 230
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.2.1",
+      "targets": [
+        {
+          "alias": "",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P951FEA4DE68E13C5"
+          },
+          "hide": false,
+          "query": "SELECT last(\"requestValue\") AS \"Request\" FROM \"autogen\".\"gatling\" WHERE (\"requestName\" =~ /^$request$/ AND \"testName\" =~ /^$simulation$/) AND $timeFilter GROUP BY time($__interval) fill(none)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P951FEA4DE68E13C5"
+          },
+          "hide": false,
+          "query": "SELECT last(\"value\") AS \"Error\" FROM \"autogen\".\"gatling\" WHERE (\"requestName\" =~ /^$request$/ AND \"testName\" =~ /^$simulation$/) AND $timeFilter GROUP BY time($__interval) fill(none)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "table"
+        }
+      ],
+      "title": "Errors ($request)",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {}
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": false,
@@ -920,7 +1094,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "All"
           ],
@@ -936,7 +1110,7 @@
         "hide": 0,
         "includeAll": true,
         "multi": true,
-        "name": "scenario",
+        "name": "simulation",
         "options": [],
         "query": "SHOW MEASUREMENTS",
         "refresh": 1,
@@ -956,13 +1130,13 @@
           "type": "influxdb",
           "uid": "P951FEA4DE68E13C5"
         },
-        "definition": "SHOW TAG VALUES FROM \"autogen\".\"gatling\" WITH KEY = \"request\" WHERE \"request\" !~ /(?i)redirect/",
+        "definition": "SHOW TAG VALUES FROM \"autogen\".\"gatling\" WITH KEY = \"request\" WHERE \"request\" !~ /users/",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "request",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"autogen\".\"gatling\" WITH KEY = \"request\" WHERE \"request\" !~ /(?i)redirect/",
+        "query": "SHOW TAG VALUES FROM \"autogen\".\"gatling\" WITH KEY = \"request\" WHERE \"request\" !~ /users/",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -971,14 +1145,10 @@
       }
     ]
   },
-  "time": {
-    "from": "2023-11-24T14:00:57.934Z",
-    "to": "2023-11-24T14:01:34.181Z"
-  },
   "timepicker": {},
   "timezone": "",
   "title": "Gatling Report Metrics",
-  "uid": "d3b3f30a-e0b8-446e-a5e2-476bb5417544",
-  "version": 2,
+  "uid": "gatling",
+  "version": 6,
   "weekStart": ""
 }
