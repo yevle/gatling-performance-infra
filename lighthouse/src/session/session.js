@@ -1,4 +1,4 @@
-import { startFlow, desktopConfig } from 'lighthouse'
+import { startFlow} from 'lighthouse'
 import puppeteer from 'puppeteer'
 import * as util from '../util/util.js'
 import { sendMsg } from '../util/slack.js'

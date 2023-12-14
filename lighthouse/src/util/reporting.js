@@ -76,6 +76,9 @@ async function generateReportForEachStep(result) {
 }
 
 async function sendReportSummary(report) {
+    if(process.env.SEND_GRAFANA_LINK){
+        await sendReportUrl(`${process.env.GRAFANA_LINK}`)
+    }
     if (process.env.SEND_REPORT_LINK) {
         const reportUrl = `${process.env.NGINX_HOST}/report/${date}/${report.title}`
         await sendReportUrl(reportUrl)
