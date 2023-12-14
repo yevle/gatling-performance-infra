@@ -1,13 +1,11 @@
 import graphite from 'graphite'
 
-export async function writeMetricsToInflux(auditType, measurement, metricName, url, metricValue) {
+export async function writeMetrics(metric, url, metricValue, gatherMode) {
     var metric = {
-        lighthouse: {
-            [auditType]: {
-                [measurement]: {
-                    [url]: {
-                        [metricName]: metricValue
-                    }
+        "lighthouse_metrics": {
+            [gatherMode]: {
+                [metric]: {
+                    [url]: metricValue
                 }
             }
         }
@@ -15,14 +13,12 @@ export async function writeMetricsToInflux(auditType, measurement, metricName, u
     writeData(metric)
 }
 
-export async function writeCategoryScoreToInflux(auditType, measurement, categoryName, url, categoryScore) {
+export async function writeScores(category, url, categoryScore, gatherMode) {
     var score = {
-        lighthouse: {
-            [auditType]: {
-                [measurement]: {
-                    [url]: {
-                        [categoryName]: categoryScore
-                    }
+        "lighthouse_score": {
+            [category]: {
+                [gatherMode]: {
+                    [url]: categoryScore
                 }
             }
         }

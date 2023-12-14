@@ -3,7 +3,6 @@ import puppeteer from 'puppeteer'
 import * as util from '../util/util.js'
 import { sendMsg } from '../util/slack.js'
 import { generateReportWriteMetrics } from '../util/reporting.js'
-import fs from 'fs'
 
 const browserOptions = util.parseJsonIntoObj(`${process.cwd()}/resources/browser-options.json`)
 browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
@@ -27,7 +26,7 @@ export async function startUserFlow(url) {
     }
 }
 
-export async function endSessionWithReport(flow) {
+export async function endSession(flow) {
     await generateReportWriteMetrics(flow)
     await flow._page.browser().close()
 }

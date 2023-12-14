@@ -1,0 +1,675 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 2,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Score",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P16E1228BE3E8EB1D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.75
+              },
+              {
+                "color": "dark-green",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P16E1228BE3E8EB1D"
+          },
+          "query": "SELECT \"value\" FROM \"lighthouse_score\"\nWHERE \"url\" = '$url' AND \"category\" =~ /$category$/\nGROUP BY \"category\"\nORDER BY time DESC\nLIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Recent LH Scores",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*seo.*/",
+            "renamePattern": "SEO"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*performance.*/",
+            "renamePattern": "Peformance"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*accessibility*./",
+            "renamePattern": "Accessibility"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P16E1228BE3E8EB1D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 10,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 0.8
+              },
+              {
+                "color": "dark-green",
+                "value": 0.9
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P16E1228BE3E8EB1D"
+          },
+          "query": "SELECT * FROM $score where \"url\"='$url' and \"category\"=~ /$category$/ group by \"category\"",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "LH scores through time",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*accessibility.*/",
+            "renamePattern": "Accessibility"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*performance.*/",
+            "renamePattern": "Performance"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*seo.*/",
+            "renamePattern": "SEO"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 5,
+      "panels": [],
+      "title": "Metrics",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P16E1228BE3E8EB1D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1200
+              },
+              {
+                "color": "red",
+                "value": 1500
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 7,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P16E1228BE3E8EB1D"
+          },
+          "query": "SELECT * FROM \"$metrics\" WHERE \"url\"='$url' AND \"gather_mode\"='$mode' AND \"metric\"=~ /$metric$/ GROUP BY \"metric\" ORDER BY \"time\" DESC limit 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Recent LH metrics",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*total-blocking-time.*/",
+            "renamePattern": "TBT"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*speed-index.*/",
+            "renamePattern": "SI"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*largest-contentful-paint.*/",
+            "renamePattern": "LCP"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*first-contentful-paint.*/",
+            "renamePattern": "FCP"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*cumulative-layout-shift.*/",
+            "renamePattern": "CLS"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*interaction-to-next-paint.*/",
+            "renamePattern": "ITNP"
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "P16E1228BE3E8EB1D"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 10,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1200
+              },
+              {
+                "color": "red",
+                "value": 1500
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 0
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "10.2.2",
+      "targets": [
+        {
+          "alias": "",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P16E1228BE3E8EB1D"
+          },
+          "hide": false,
+          "query": "SELECT * FROM \"$metrics\" where \"url\"='$url' and \"gather_mode\"='$mode' and \"metric\"=~ /$metric$/ group by \"metric\"",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "LH metrics through time",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*cumulative-layout-shift.*/",
+            "renamePattern": "CLS"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*first-contentful-paint.*/",
+            "renamePattern": "FCP"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*interaction-to-next-paint.*/",
+            "renamePattern": "ITNP"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*largest-contentful-paint.*/",
+            "renamePattern": "LCP"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*speed-index.*/",
+            "renamePattern": "SI"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "/.*total-blocking-time.*/",
+            "renamePattern": "TBT"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "timeseries"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 38,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "hide": 2,
+        "label": "",
+        "name": "metrics",
+        "query": "lighthouse_metrics",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "base_url/",
+          "value": "base_url/"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "P16E1228BE3E8EB1D"
+        },
+        "definition": "show tag values from $metrics with key=\"url\"",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Url",
+        "multi": false,
+        "name": "url",
+        "options": [],
+        "query": "show tag values from $metrics with key=\"url\"",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "hide": 2,
+        "label": "Score",
+        "name": "score",
+        "query": "lighthouse_score",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "navigation",
+          "value": "navigation"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Audit mode",
+        "multi": false,
+        "name": "mode",
+        "options": [
+          {
+            "selected": true,
+            "text": "navigation",
+            "value": "navigation"
+          },
+          {
+            "selected": false,
+            "text": "timespan",
+            "value": "timespan"
+          },
+          {
+            "selected": false,
+            "text": "snapshot",
+            "value": "snapshot"
+          }
+        ],
+        "query": "navigation, timespan,snapshot",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "P16E1228BE3E8EB1D"
+        },
+        "definition": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_metrics WITH KEY=\"metric\"",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Metric",
+        "multi": true,
+        "name": "metric",
+        "options": [],
+        "query": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_metrics WITH KEY=\"metric\"",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "P16E1228BE3E8EB1D"
+        },
+        "definition": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_score WITH KEY=\"category\"",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Category",
+        "multi": true,
+        "name": "category",
+        "options": [],
+        "query": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_score WITH KEY=\"category\"",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "2023-12-14T09:40:50.488Z",
+    "to": "2023-12-14T09:43:14.553Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Lighthouse Report Metrics",
+  "uid": "ab5bc562-899f-4e3f-80af-746b9c126ec7",
+  "version": 4,
+  "weekStart": ""
+}
