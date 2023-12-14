@@ -526,7 +526,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 38,
   "tags": [],
   "templating": {
@@ -670,6 +670,6 @@
   "timezone": "",
   "title": "Lighthouse Report Metrics",
   "uid": "ab5bc562-899f-4e3f-80af-746b9c126ec7",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }
