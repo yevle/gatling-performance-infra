@@ -231,7 +231,7 @@
           }
         ]
       },
-      "pluginVersion": "10.2.1",
+      "pluginVersion": "10.3.0-149675",
       "targets": [
         {
           "datasource": {
@@ -520,23 +520,30 @@
         {
           "id": "calculateField",
           "options": {
-            "alias": "% KO",
+            "alias": "KO part",
             "binary": {
               "left": "KO",
               "operator": "/",
-              "right": "OK"
+              "right": "Total"
             },
             "mode": "binary",
             "reduce": {
-              "include": [
-                "OK",
-                "KO"
-              ],
-              "reducer": "diffperc"
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "% KO",
+            "binary": {
+              "left": "KO part",
+              "operator": "*",
+              "right": "100"
             },
-            "unary": {
-              "fieldName": "OK",
-              "operator": "abs"
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
             }
           }
         },
@@ -544,10 +551,12 @@
           "id": "organize",
           "options": {
             "excludeByName": {
+              "KO part": true,
               "Time": true,
               "Time 2": true,
               "Time 3": true
             },
+            "includeByName": {},
             "indexByName": {
               "% KO": 4,
               "50%": 10,
@@ -574,6 +583,24 @@
             "renameByName": {
               "request": "Request"
             }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": ".*Slack*"
+                  }
+                },
+                "fieldName": "Request"
+              }
+            ],
+            "match": "any",
+            "type": "exclude"
           }
         }
       ],
@@ -1051,7 +1078,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "10.2.1",
+      "pluginVersion": "10.3.0-149675",
       "targets": [
         {
           "alias": "",
@@ -1087,14 +1114,14 @@
       "type": "table"
     }
   ],
-  "refresh": false,
-  "schemaVersion": 38,
+  "refresh": "10s",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": [
             "All"
           ],
@@ -1122,7 +1149,7 @@
       {
         "allValue": "allRequests",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "allRequests",
           "value": "allRequests"
         },
@@ -1130,25 +1157,29 @@
           "type": "influxdb",
           "uid": "P951FEA4DE68E13C5"
         },
-        "definition": "SHOW TAG VALUES FROM \"autogen\".\"gatling\" WITH KEY = \"request\" WHERE \"request\" !~ /users/",
+        "definition": "SELECT request,last(\"count\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND request !~ /^*Slack*/) AND $timeFilter GROUP BY \"request\"",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "request",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"autogen\".\"gatling\" WITH KEY = \"request\" WHERE \"request\" !~ /users/",
-        "refresh": 1,
-        "regex": "",
+        "query": "SELECT request,last(\"count\") FROM \"autogen\".\"gatling\" WHERE (\"simulation\" =~ /^$simulation$/ AND request !~ /^*Slack*/) AND $timeFilter GROUP BY \"request\"",
+        "refresh": 2,
+        "regex": "^(?=.*[a-zA-Z])[a-zA-Z0-9_]+$",
         "skipUrlSync": false,
         "sort": 2,
         "type": "query"
       }
     ]
   },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
   "timepicker": {},
   "timezone": "",
   "title": "Gatling Report Metrics",
   "uid": "gatling",
-  "version": 6,
+  "version": 7,
   "weekStart": ""
 }
