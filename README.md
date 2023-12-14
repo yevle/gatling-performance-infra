@@ -3,7 +3,8 @@ Copyright © 2023 Yevhen Levchenko ylevchenko@solvd.com
 -->
 
 # Performance testing framework
-This framework could be used for backend load testing with Gatling load-tool and Prometheus - Grafana open-source solutions for host resources monitoring.
+This framework could be used for backend load testing with Gatling load-tool and Lighthouse for web UI performance testing.
+With Grafana open-source visualisation solution you can retrieve real-time metrics for Gatling tests and Prometheus host resources monitoring.
 
 ## Getting Started
 
@@ -45,7 +46,7 @@ Login to Jenkins with admin/admin(could be changed in docker-compose file).
 By default, jenkins consists of 3 jobs:
 - **GatlingBackend**: runs Gatling simulation with only parameter: -SIMULATION, to set simulation class name.
 - **GatlingBackendParam**: runs Gatling simulation with runtime parameters: -SIMULATION -USERS -RAMPUP -DURATION
-- **Lighthouse**: runs Gatling simulations with runtime parameters: -SIMULATION -USERS -RAMPUP -DURATION
+- **Lighthouse**: runs load simulation on defined web service
 
 ## Making your gatling script compatible with framework
 
@@ -53,11 +54,13 @@ Framework accept both .java and .scala versions of scripts. For default GatlingB
 - -USERS
 - -RAMPUP
 - -DURATION
+
 Before project building, you need to place simulation files in named directory inside 'gatling/simulations/' folder. Also all needed resources should be placed inside 'gatling/resources/' folder.
 
 ## Running scenario with GatlingBackendParam job
 
-To run Gatling demo script: **Open GatlingBackendParam job -> Build with Parameters -> Set simulation file name (<folder>.<name.scala>) -> Set build parameters  -> Build**
+To run Gatling demo script: 
+**Open GatlingBackendParam job -> Build with Parameters -> Set simulation file name (<<folder>>.<<filename.scala>>) -> Set build parameters  -> Build**
 
 This job will start Gatling docker container and execute defined Gatling load simulation.
 
@@ -69,17 +72,18 @@ Runtime metrics link is available in job description as well as post-run link wi
 
 ## Grafana
 
-Real time host performance metrics should be available in 'Docker monitoring with service selection' dashboard. 
-Dashboard contains visualizations based on data from prometheus.
-You can login to Grafana with admin/admin and edit any dashboard.
+### Available Gatling metrics
 
-### Available metrics
-
-Gatling Report Metrics dashboard has multiple rows with different metrics:
+**Gatling Report Metrics** dashboard has multiple rows with different metrics:
 - Table: Overall statistics for each request (Total requests count; OK and KO statuses count; Max / Min / Mean response time and percentiles; Std deviation). 
 - Graph: Responses Status over Active Users (Shows count of OK/KO responses as well as users count each second)
 - Graph: Requests Response Time (Shows changes in Min/Max/Mean response timings)
 - Table: Errors (List of requests error messages)
+
+### Prometheus Metrics
+Real time host performance metrics should be available in **Docker monitoring with service selection** dashboard.
+Dashboard contains visualizations based on data from prometheus.
+You can login to Grafana with admin/admin and edit any dashboard.
 
 ### Timerange
 
