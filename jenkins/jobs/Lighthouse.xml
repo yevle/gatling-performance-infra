@@ -42,7 +42,7 @@
             <command>
                 docker run --name lighthouse --net=host --volumes-from=jenkins \
                 -e SLACK_KEY="${SLACK_KEY}" \
-                gatling-performance-infra-lighthouse node test.js
+                gatling-performance-infra-lighthouse npm test
             </command>
             <configuredLocalRules />
         </hudson.tasks.Shell>
