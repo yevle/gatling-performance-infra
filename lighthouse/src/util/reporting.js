@@ -9,9 +9,7 @@ const allReportsDir = `${process.cwd()}/report`
 const reportDir = `${allReportsDir}/${date}`
 const reportType = `${process.env.REPORT_TYPE}`
 
-export async function generateReportWriteMetrics(flow) {
-    const result = await flow.createFlowResult()
-
+export async function generateReportWriteMetrics(result) {
     if (process.env.WRITE_TO_DB) {
         await writeMetricsToInfluxDb(result)
     }
@@ -35,7 +33,9 @@ async function writeMetricsToInfluxDb(result) {
         categories.forEach(async category => {
             if (step.lhr.categories[category]) {
                 const categoryScore = step.lhr.categories[category].score
-                await writeScores(category, modifiedUrl, categoryScore, gatherMode)
+                try {
+                    await writeScores(category, modifiedUrl, categoryScore, gatherMode)
+                } catch (error) { console.log("score") }
             }
         })
         metrics.forEach(async metric => {
@@ -45,6 +45,7 @@ async function writeMetricsToInfluxDb(result) {
             }
         })
     })
+
 }
 
 async function generateReports(result) {
@@ -76,7 +77,7 @@ async function generateReportForEachStep(result) {
 }
 
 async function sendReportSummary(report) {
-    if(process.env.SEND_GRAFANA_LINK){
+    if (process.env.SEND_GRAFANA_LINK) {
         await sendReportUrl(`${process.env.GRAFANA_LINK}`)
     }
     if (process.env.SEND_REPORT_LINK) {

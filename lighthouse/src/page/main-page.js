@@ -21,4 +21,8 @@ export class MainPage extends AbstractPage{
         await this.allProductsLink.waitAndClick()
         return new AllCategoriesPage(this.flow)
     }
+
+    getFlow(){
+        return this.flow
+    }
 }

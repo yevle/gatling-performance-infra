@@ -4,6 +4,7 @@ export class AbstractPage {
 
     constructor(flow) {
         this.flow = flow
+        this.url = this.flow._page.url()
         this.pageHeader = 'default'
         this.pageHeaderSelector = 'h2'
     }
@@ -12,9 +13,4 @@ export class AbstractPage {
         const header = await this.flow._page.$eval(this.pageHeaderSelector, el => el.textContent)
         return header == this.pageHeader
     }
-
-    getUrl() {
-        return this.flow._page.url()
-    }
-
 }
