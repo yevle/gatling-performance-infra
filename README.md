@@ -46,7 +46,8 @@ Login to Jenkins with admin/admin(could be changed in docker-compose file).
 By default, jenkins consists of 3 jobs:
 - **GatlingBackend**: runs Gatling simulation with only parameter: -SIMULATION, to set simulation class name.
 - **GatlingBackendParam**: runs Gatling simulation with runtime parameters: -SIMULATION -USERS -RAMPUP -DURATION
-- **Lighthouse**: runs load simulation on defined web service
+
+- **Lighthouse**: runs load simulation on defined web service with runtime parameter: -SLACK_KEY
 
 ## Making your gatling script compatible with framework
 

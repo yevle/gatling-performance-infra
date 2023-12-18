@@ -1,10 +1,10 @@
 import graphite from 'graphite'
 
-export async function writeMetricsToInflux(auditCategory, metricName, url, metricValue) {
+export async function writeMetrics(metric, url, metricValue, gatherMode) {
     var metric = {
-        lighthouse: {
-            [auditCategory]: {
-                [metricName]: {
+        "lighthouse_metrics": {
+            [gatherMode]: {
+                [metric]: {
                     [url]: metricValue
                 }
             }
@@ -13,11 +13,11 @@ export async function writeMetricsToInflux(auditCategory, metricName, url, metri
     writeData(metric)
 }
 
-export async function writeCategoryScoresToInflux(flowType, categoryName, url, categoryScore) {
+export async function writeScores(category, url, categoryScore, gatherMode) {
     var score = {
-        lighthouse: {
-            [flowType]: {
-                [categoryName]: {
+        "lighthouse_score": {
+            [category]: {
+                [gatherMode]: {
                     [url]: categoryScore
                 }
             }
@@ -32,9 +32,7 @@ function writeData(data) {
         if (err) {
             console.log(err)
         } else {
-            console.log('Data written')
             client.end()
-            console.log('Connection closed')
         }
     });
 }

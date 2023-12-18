@@ -30,3 +30,21 @@ datasources:
     jsonData: {
       }
     secureJsonFields: null
+
+  - name: "InfluxDB-LH"
+    id: 1
+    orgId: 1
+    type: influxdb
+    url: http://influxdb:8086
+    access: proxy
+    user: ''
+    password: ''
+    database: "lighthouse"
+    basicAuth: false
+    basicAuthUser: ""
+    basicAuthPassword: ""
+    withCredentials: false
+    isDefault: false
+    jsonData: {
+      }
+    secureJsonFields: null
