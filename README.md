@@ -1,5 +1,8 @@
 <!--- 
-Copyright © 2023 Yevhen Levchenko ylevchenko@solvd.com
+Copyright © 2023 
+Yevhen Levchenko ylevchenko@solvd.com
+Sviatoslav Paseka spaseka@solvd.com
+Mihail Belyuk mbelyuk@solvd.com
 -->
 
 # Performance testing framework
@@ -60,8 +63,9 @@ Before project building, you need to place simulation files in named directory i
 
 ## Running scenario with GatlingBackendParam job
 
-To run Gatling demo script: 
-**Open GatlingBackendParam job -> Build with Parameters -> Set simulation file name (<<folder>>.<<filename.scala>>) -> Set build parameters  -> Build**
+To run Gatling demo script:
+
+**Open GatlingBackendParam job -> Build with Parameters -> Set simulation file name (<foldername.Filename>) -> Set build parameters  -> Build**
 
 This job will start Gatling docker container and execute defined Gatling load simulation.
 

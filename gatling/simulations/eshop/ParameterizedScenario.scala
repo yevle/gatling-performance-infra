@@ -2,7 +2,7 @@ package eshop
 
 import eshop.chains.OrderCreationChain
 import eshop.utils.PropertyConfigurator.getProperty
-import eshop.utils.{Configurator, ScenarioInjector, SlackNotificator}
+import eshop.utils.{Configurator, DbClient, ScenarioInjector, SlackNotificator}
 import io.gatling.core.Predef._
 import io.gatling.core.scenario.Simulation
 import io.gatling.core.structure.{PopulationBuilder, ScenarioBuilder}
@@ -55,6 +55,7 @@ class ParameterizedScenario extends Simulation{
   ).assertions(asserts)
 
   after {
-
+    DbClient.buildNumberWriter(startTime)
   }
+
 }
