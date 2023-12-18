@@ -1,9 +1,10 @@
-import { WebElement } from "./web-element.js"
+
 
 export class AbstractPage {
 
     constructor(flow) {
         this.flow = flow
+        this.url = this.flow._page.url()
         this.pageHeader = 'default'
         this.pageHeaderSelector = 'h2'
     }
@@ -13,8 +14,19 @@ export class AbstractPage {
         return header == this.pageHeader
     }
 
-    getUrl() {
-        return this.flow._page.url()
+    async navigate() {
+        await this.flow.navigate(this.url)
     }
 
+    async snapshot() {
+        await this.flow.snapshot()
+    }
+
+    async startTimespan() {
+        await this.flow.startTimespan()
+    }
+
+    async endTimespan() {
+        await this.flow.endTimespan()
+    }
 }

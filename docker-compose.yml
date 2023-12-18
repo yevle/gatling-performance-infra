@@ -96,7 +96,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /var/run/docker.sock:/var/run/docker.sock
-  ## Uncomment to use NewRelic monitoring agent. Need to add License Key to newrelic-infra.yml.
+  # Uncomment to use NewRelic monitoring agent. Need to add License Key to newrelic-infra.yml.
   #  agent:
   #    container_name: newrelic-infra
   #    build:
@@ -120,13 +120,13 @@ services:
       - lighthouse:/lighthouse
     env_file:
       - ./lighthouse/.env
-  nginx:
-    container_name: nginx
-    build: ./lighthouse/nginx
-    ports:
-      - 8085:80
-    volumes:
-      - nginx:/usr/share/nginx/html/report
+  # nginx:
+  #   container_name: nginx
+  #   build: ./lighthouse/nginx
+  #   ports:
+  #     - 8085:80
+  #   volumes:
+  #     - nginx:/usr/share/nginx/html/report
 volumes:
   docker-dind:
   jenkins-home:

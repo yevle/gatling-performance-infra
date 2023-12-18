@@ -9,6 +9,6 @@ export function parseJsonIntoObj(path) {
     return JSON.parse(browserOptionsStr)
 }
 
-export function decryptSlackToken() {
-    return Encryptor.decrypt(`${process.env.SLACK_KEY}`, `${process.env.ENCRYPTED_SLACK_TOKEN}`)
+export function decrypt(key,encryptedValue) {
+    return Encryptor.decrypt(key, encryptedValue)
 }
