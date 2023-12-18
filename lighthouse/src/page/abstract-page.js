@@ -1,4 +1,4 @@
-import { WebElement } from "./web-element.js"
+
 
 export class AbstractPage {
 
@@ -12,5 +12,21 @@ export class AbstractPage {
     async isPageOpened() {
         const header = await this.flow._page.$eval(this.pageHeaderSelector, el => el.textContent)
         return header == this.pageHeader
+    }
+
+    async navigate() {
+        await this.flow.navigate(this.url)
+    }
+
+    async snapshot() {
+        await this.flow.snapshot()
+    }
+
+    async startTimespan() {
+        await this.flow.startTimespan()
+    }
+
+    async endTimespan() {
+        await this.flow.endTimespan()
     }
 }

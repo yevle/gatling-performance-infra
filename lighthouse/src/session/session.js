@@ -2,10 +2,12 @@ import { startFlow } from 'lighthouse'
 import puppeteer from 'puppeteer'
 import * as util from '../util/util.js'
 import { sendMsg } from '../util/slack.js'
-import { generateReportWriteMetrics } from '../util/reporting.js'
+import { generateTestReport, writeAggregatedMetrics } from '../util/reporting.js'
 import { MainPage } from '../page/main-page.js'
+import { flow } from '../../test.js'
 
-let aggregatedResult = { steps: [] }
+let aggregatedTestResult = { steps: [] }
+let aggregatedSessionResult = { steps: [] }
 const browserOptions = util.parseJsonIntoObj(`${process.cwd()}/resources/browser-options.json`)
 browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
 export const flowConfig = util.parseJsonIntoObj(`${process.cwd()}/resources/flow-config.json`)
@@ -30,29 +32,30 @@ export async function startLhFlowOpenMainPage() {
     }
     try {
         flow = await startFlow(page, flowConfig)
+        console.log('Session started.')
     } catch (error) {
         message = `Failed to start LH flow - ${error}`
         console.log(message)
         await sendMsg(message)
     }
-    message = 'UI testing has began! New session started.'
-    console.log(message)
-    await sendMsg(message)
     return new MainPage(flow)
 }
 
 
 
 export async function endSession() {
-    await generateReportWriteMetrics(aggregatedResult)
-}
-
-
-export async function collectResult(flow) {
     const result = await flow.createFlowResult()
     const steps = result.steps
     steps.forEach(step => {
-        aggregatedResult.steps.push(step)
+        aggregatedSessionResult.steps.push(step)
+        aggregatedTestResult.steps.push(step)
     });
     await flow._page.browser().close()
+    console.log('Session closed.')
+    await writeAggregatedMetrics(aggregatedSessionResult)
+    aggregatedSessionResult = { steps: [] }
+}
+
+export async function endTest(){
+    await generateTestReport(aggregatedTestResult)
 }

@@ -3,17 +3,21 @@ import { generateReport } from 'lighthouse';
 import { writeMetrics, writeScores } from './influxdb.js';
 import { sendHtmlReport, sendReportUrl } from './slack.js';
 import { flowConfig } from '../session/session.js';
+import {performanceMetrics as metrics}  from './constant.js';
 
 const date = new Date().getTime()
 const allReportsDir = `${process.cwd()}/report`
 const reportDir = `${allReportsDir}/${date}`
 const reportType = `${process.env.REPORT_TYPE}`
 
-export async function generateReportWriteMetrics(result) {
+
+export async function writeAggregatedMetrics(result) {
     if (process.env.WRITE_TO_DB) {
         await writeMetricsToInfluxDb(result)
     }
+}
 
+export async function generateTestReport(result) {
     if (process.env.CREATE_REPORT) {
         createReportDirectories()
         await generateReports(result)
@@ -22,7 +26,7 @@ export async function generateReportWriteMetrics(result) {
 
 async function writeMetricsToInfluxDb(result) {
     const categories = flowConfig.config.settings.onlyCategories
-    const metrics = ['first-contentful-paint', 'total-blocking-time', 'cumulative-layout-shift', 'largest-contentful-paint', 'speed-index', 'interaction-to-next-paint']
+    // const metrics = ['first-contentful-paint', 'total-blocking-time', 'cumulative-layout-shift', 'largest-contentful-paint', 'speed-index', 'interaction-to-next-paint']
     const steps = result.steps
 
     await steps.forEach(async step => {
@@ -33,9 +37,7 @@ async function writeMetricsToInfluxDb(result) {
         categories.forEach(async category => {
             if (step.lhr.categories[category]) {
                 const categoryScore = step.lhr.categories[category].score
-                try {
-                    await writeScores(category, modifiedUrl, categoryScore, gatherMode)
-                } catch (error) { console.log("score") }
+                await writeScores(category, modifiedUrl, categoryScore, gatherMode)
             }
         })
         metrics.forEach(async metric => {
@@ -50,7 +52,7 @@ async function writeMetricsToInfluxDb(result) {
 
 async function generateReports(result) {
     await generateSummaryReport(result)
-    await generateReportForEachStep(result)
+    // await generateReportForEachStep(result)
 }
 
 async function generateSummaryReport(result) {
