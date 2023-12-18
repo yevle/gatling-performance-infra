@@ -1,27 +1,23 @@
 import fs from 'fs'
 
-const reportPath1 = '/lighthouse/report/1702552481334/summary-1702552481334.html'
-const reportPath2 = '/lighthouse/report/1702552531983/summary-1702552531983.html'
+const reportPath1 = '/lighthouse/report/1702886338878/summary-1702886338878.html'
+const reportPath2 = '/lighthouse/report/1702886490831/summary-1702886490831.html'
 compareReports(reportPath1, reportPath2)
 
 function compareReports(report1, report2) {
 
   const html = `
 <html>
-<body class="body">
-<h1>Last two results</h1>
+<body>
   <iframe class="frame-l" src="${report1}"></iframe>
   <iframe class="frame-r" src="${report2}"></iframe>
 </body>
 
 <style>
-  .body {
-    padding-top: 30;
-  }
 
   .frame-l {
     width: 785;
-    height: 5000;
+    height: 3000;
     border-top: 0;
     border-left: 0;
     border-right: 1;
@@ -33,7 +29,7 @@ function compareReports(report1, report2) {
 
   .frame-r {
     width: 785;
-    height: 5000;
+    height: 3000;
     border-top: 0;
     border-left: 0;
     border-left-color: white;
