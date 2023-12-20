@@ -35,8 +35,8 @@ object DbClient {
     }
   }
 
-  def buildNumberWriter(startTime:LocalDateTime) = {
-    metricWriter.writeBuildNumber(influxDB, buildNumber, startTime)
+  def buildInfoWriter(startTime:LocalDateTime) = {
+    metricWriter.writeBuildInfo(influxDB, buildNumber, startTime)
   }
 
 }

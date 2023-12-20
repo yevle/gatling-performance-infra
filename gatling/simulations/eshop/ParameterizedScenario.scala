@@ -19,7 +19,7 @@ class ParameterizedScenario extends Simulation{
   def userCount: Int = getProperty("USERS", Configurator.usersCount.toString).toInt
   def rampUpDuration: Int = getProperty("RAMP_DURATION", Configurator.rampUpDurationSeconds.toString).toInt
   def testDuration: Int = getProperty("TEST_DURATION", Configurator.testDurationSeconds.toString).toInt
-  def user: String = getProperty("JENKINS_ADMIN_LOGIN", "POKA_NE_ADMIN")
+  def user: String = getProperty("JENKINS_LOGIN", "POKA_NE_ADMIN")
 
   before {
     startTime = LocalDateTime.now()
@@ -55,7 +55,7 @@ class ParameterizedScenario extends Simulation{
   ).assertions(asserts)
 
   after {
-    DbClient.buildNumberWriter(startTime)
+    DbClient.buildInfoWriter(startTime)
   }
 
 }
