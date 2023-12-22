@@ -1,15 +1,12 @@
-FROM node
+FROM --platform=linux/amd64 node
 
-# We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_EXECUTABLE_PATH="/chrome/linux-119.0.6045.105/chrome-linux64/chrome"
 
-# Install Google Chrome Stable and fonts
-# Note: this installs the necessary libs to make the browser work with Puppeteer.
-RUN apt-get update \
- && apt-get install -y chromium \
-    fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-    --no-install-recommends
+RUN npx @puppeteer/browsers install chrome@119.0.6045.105
+RUN apt-get update &&\
+    apt-get install -yq xvfb libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon-x11-0 \
+    libxcomposite1 libxdamage1 libgbm1 libasound2
 
 WORKDIR /lighthouse
 COPY package.json package.json
