@@ -9,8 +9,10 @@ let mainPage
 before(async () => {
     const message = 'Ui testing started.'
     console.log(message)
-    console.log(`${process.env.PUPPETEER_EXECUTABLE_PATH}`)
     await sendMsg(message)
+    console.log(process.env.SLACK_KEY)
+    console.log(process.env.DISPLAY)
+
 })
 
 beforeEach(async () => {

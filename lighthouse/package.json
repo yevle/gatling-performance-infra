@@ -19,6 +19,7 @@
     "expand": "^0.0.1",
     "fs": "^0.0.1-security",
     "graphite": "^0.1.5",
+    "jquery": "^3.7.1",
     "lighthouse": "^11.3.0",
     "mocha": "^10.2.0",
     "puppeteer": "^v21.5.0"

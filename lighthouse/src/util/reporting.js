@@ -3,7 +3,8 @@ import { generateReport } from 'lighthouse';
 import { writeMetrics, writeScores } from './influxdb.js';
 import { sendHtmlReport, sendReportUrl } from './slack.js';
 import { flowConfig } from '../session/session.js';
-import {performanceMetrics as metrics}  from './constant.js';
+import { performanceMetrics as metrics } from './constant.js';
+import { compareReports } from './compare-reports.js';
 
 const date = new Date().getTime()
 const allReportsDir = `${process.cwd()}/report`
@@ -26,7 +27,6 @@ export async function generateTestReport(result) {
 
 async function writeMetricsToInfluxDb(result) {
     const categories = flowConfig.config.settings.onlyCategories
-    // const metrics = ['first-contentful-paint', 'total-blocking-time', 'cumulative-layout-shift', 'largest-contentful-paint', 'speed-index', 'interaction-to-next-paint']
     const steps = result.steps
 
     await steps.forEach(async step => {
@@ -88,6 +88,11 @@ async function sendReportSummary(report) {
     }
     if (process.env.SEND_HTML_REPORT) {
         await sendHtmlReport(report)
+    }
+    if (process.env.SEND_COMPARE_REPORT_URL) {
+        compareReports()
+        const compareReportUrl = `${process.env.NGINX_HOST}/report/0/compare-report.html`
+        await sendReportUrl(compareReportUrl)
     }
 }
 

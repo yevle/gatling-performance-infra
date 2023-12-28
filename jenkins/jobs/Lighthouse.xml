@@ -1,76 +1,75 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
-    <actions />
-    <description>Running UI Performance tests with Lighthouse</description>
-    <keepDependencies>false</keepDependencies>
-    <properties>
-        <org.jenkinsci.plugins.compressbuildlog.BuildLogCompressor plugin="compress-buildlog@1.2" />
-        <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@320.v5a_0933a_e7d61">
-            <autoRebuild>false</autoRebuild>
-            <rebuildDisabled>false</rebuildDisabled>
-        </com.sonyericsson.rebuild.RebuildSettings>
-        <hudson.model.ParametersDefinitionProperty>
-            <parameterDefinitions>
-                <hudson.model.StringParameterDefinition>
-                    <name>SLACK_KEY</name>
-                    <description>Slack crypto key</description>
-                    <defaultValue>key</defaultValue>
-                    <trim>false</trim>
-                </hudson.model.StringParameterDefinition>
-            </parameterDefinitions>
-        </hudson.model.ParametersDefinitionProperty>
-    </properties>
-    <scm class="hudson.scm.NullSCM" />
-    <canRoam>true</canRoam>
-    <disabled>false</disabled>
-    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-    <triggers />
-    <concurrentBuild>false</concurrentBuild>
-    <builders>
-        <hudson.tasks.Shell>
-            <command>
+  <actions/>
+  <description>Running UI Performance tests with Lighthouse</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.compressbuildlog.BuildLogCompressor plugin="compress-buildlog@1.2"/>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>SLACK_KEY</name>
+          <description>Slack crypto key</description>
+          <defaultValue>key</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DISPLAY</name>
+          <description>Xvfb display</description>
+          <defaultValue>:1</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
                 if docker container ls -a| grep lighthouse;
                 then
                 docker container stop lighthouse
                 docker container rm lighthouse
                 fi
             </command>
-            <configuredLocalRules />
-        </hudson.tasks.Shell>
-        <hudson.tasks.Shell>
-            <command>
-                docker run --name lighthouse --platform linux/amd64 --net=host --volumes-from=jenkins \
-                -e SLACK_KEY="${SLACK_KEY}" \
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>
+                docker run --name lighthouse --net=host -v gatling-performance-infra_lighthouse:/lighthouse/report --volumes-from=jenkins \
+                -e SLACK_KEY=&quot;${SLACK_KEY}&quot; \
+                -e DISPLAY=&quot;${DISPLAY}&quot; \
                 gatling-performance-infra-lighthouse \
-                bash -c "Xvfb :99 -ac &amp; npm test"
+                bash -c &quot;Xvfb ${DISPLAY} -ac &amp; npm test&quot;
             </command>
-            <configuredLocalRules />
-        </hudson.tasks.Shell>
-    </builders>
-    <publishers>
-        <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.9">
-            <tasks>
-                <hudson.plugins.postbuildtask.TaskProperties>
-                    <logTexts>
-                        <hudson.plugins.postbuildtask.LogProperties>
-                            <logText>Test run complete!</logText>
-                            <operator>OR</operator>
-                        </hudson.plugins.postbuildtask.LogProperties>
-                    </logTexts>
-                    <EscalateStatus>false</EscalateStatus>
-                    <RunIfJobSuccessful>false</RunIfJobSuccessful>
-                    <script>
-                        pkill Xvfb
-                        docker cp lighthouse:/lighthouse/report/ .
-                        docker cp . jenkins:/var/jenkins_home/workspace/Lighthouse/
-                        docker cp . nginx:/usr/share/nginx/html/
-                        docker rm lighthouse
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.9">
+      <tasks>
+        <hudson.plugins.postbuildtask.TaskProperties>
+          <logTexts>
+            <hudson.plugins.postbuildtask.LogProperties>
+              <logText>Test run complete!</logText>
+              <operator>OR</operator>
+            </hudson.plugins.postbuildtask.LogProperties>
+          </logTexts>
+          <EscalateStatus>false</EscalateStatus>
+          <RunIfJobSuccessful>false</RunIfJobSuccessful>
+          <script>                        docker cp lighthouse:/lighthouse/report/ .&#xd;
+                        docker cp . jenkins:/var/jenkins_home/workspace/Lighthouse/&#xd;
+                        docker rm lighthouse&#xd;
                     </script>
-                </hudson.plugins.postbuildtask.TaskProperties>
-            </tasks>
-        </hudson.plugins.postbuildtask.PostbuildTask>
-
-    </publishers>
-    <buildWrappers />
+        </hudson.plugins.postbuildtask.TaskProperties>
+      </tasks>
+    </hudson.plugins.postbuildtask.PostbuildTask>
+  </publishers>
+  <buildWrappers/>
 </project>

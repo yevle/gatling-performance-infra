@@ -117,16 +117,9 @@ services:
     depends_on:
       - influxdb
     volumes:
-      - lighthouse:/lighthouse
+      - lighthouse:/lighthouse/report
     env_file:
       - ./lighthouse/.env
-  # nginx:
-  #   container_name: nginx
-  #   build: ./lighthouse/nginx
-  #   ports:
-  #     - 8085:80
-  #   volumes:
-  #     - nginx:/usr/share/nginx/html/report
 volumes:
   docker-dind:
   jenkins-home:
