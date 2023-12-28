@@ -42,8 +42,10 @@
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>
-                docker run --name lighthouse --net=host -v gatling-performance-infra_lighthouse:/lighthouse/report --volumes-from=jenkins \
-                -e SLACK_KEY=&quot;${SLACK_KEY}&quot; \
+                docker run --name lighthouse --net=host \
+                -v gatling-performance-infra_lighthouse:/lighthouse/report \
+                --volumes-from=jenkins \
+                -e CRYPTO_KEY=&quot;${CRYPTO_KEY}&quot; \
                 -e DISPLAY=&quot;${DISPLAY}&quot; \
                 gatling-performance-infra-lighthouse \
                 bash -c &quot;Xvfb ${DISPLAY} -ac &amp; npm test&quot;
@@ -65,7 +67,6 @@
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
           <script>                        docker cp lighthouse:/lighthouse/report/ .&#xd;
                         docker cp . jenkins:/var/jenkins_home/workspace/Lighthouse/&#xd;
-                        docker rm lighthouse&#xd;
                     </script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
