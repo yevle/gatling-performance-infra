@@ -2,17 +2,18 @@ import { after, describe, it } from "mocha";
 import { sendMsg } from "./src/util/slack.js";
 import { endSession, startLhFlowOpenMainPage, endTest } from "./src/session/session.js";
 import assert from "assert";
+import { PuppeteerScreenRecorder } from "puppeteer-screen-recorder";
+import { reportDir } from "./src/util/reporting.js";
+import { parseJsonIntoObj } from "./src/util/util.js";
 
 export let flow
 let mainPage
+const recorderOptions = parseJsonIntoObj(`${process.cwd()}/resources/video-recorder-options.json`)    
 
 before(async () => {
     const message = 'Ui testing started.'
     console.log(message)
     await sendMsg(message)
-    console.log(process.env.SLACK_KEY)
-    console.log(process.env.DISPLAY)
-
 })
 
 beforeEach(async () => {
@@ -22,7 +23,9 @@ beforeEach(async () => {
 
 describe('Audit pages', () => {
     it('audit main and login', async () => {
+        const recorder = new PuppeteerScreenRecorder(flow._page, recorderOptions)
         try {
+            await recorder.start(`${reportDir}/audit-main-page-and-login.mp4`)
             assert(await mainPage.isPageOpened(), 'Open main page')
             await mainPage.navigate()
 
@@ -35,6 +38,7 @@ describe('Audit pages', () => {
             await loginPage.enterPassword(`${process.env.USER_PASSWORD}`)
             await loginPage.endTimespan()
             await loginPage.snapshot()
+            await recorder.stop()
         } finally {
             endSession()
         }

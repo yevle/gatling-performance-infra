@@ -12,16 +12,44 @@ export function compareReports() {
       recentReportDirName = dirNames.pop()
       previousReportDirName = dirNames.pop()
 
-      console.log(`${process.env.WORK_SPACE}`)
       const recentReport = `${process.env.WORK_SPACE}/report/${recentReportDirName}/summary-${recentReportDirName}.html`
       const previousReport = `${process.env.WORK_SPACE}/report/${previousReportDirName}/summary-${previousReportDirName}.html`
 
       const html = `
+      <!DOCTYPE html>
       <html>
 
+      <head>
+        <style>
+          .frame {
+            width: 100%;
+            height: 1200;
+          }
+      
+          .frame-l {
+            float: left;
+          }
+      
+          .frame-r {
+            float: right;
+          }
+      
+          table {
+            width: 100%;
+          }
+      
+          th {
+            font-size: 200%;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 100;
+          }
+        </style>
+      </head>
+      
       <body>
         <table>
-          <th>Previous report</th><th>Recent report</th>
+          <th>Previous report</th>
+          <th>Recent report</th>
           <tr>
             <td>
               <iframe class="frame-l frame" src="${previousReport}"></iframe>
@@ -32,31 +60,6 @@ export function compareReports() {
           </tr>
         </table>
       </body>
-      
-      <style>
-        .frame {
-          width: 100%;
-          height:1200;
-        }
-      
-        .frame-l {
-          float: left;
-        }
-      
-        .frame-r {
-          float: right;
-        }
-      
-        table {
-          width: 100%;
-        }
-      
-        th {
-          font-size: 200%;
-          font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-          font-weight: 100;
-        }
-      </style>
       
       </html>
 `

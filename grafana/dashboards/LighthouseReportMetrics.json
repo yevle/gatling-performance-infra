@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -86,14 +86,14 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P16E1228BE3E8EB1D"
           },
-          "query": "SELECT \"value\" FROM \"lighthouse_score\"\nWHERE \"url\" = '$url' AND \"category\" =~ /$category$/\nGROUP BY \"category\"\nORDER BY time DESC\nLIMIT 1",
+          "query": "SELECT \"value\" FROM \"lighthouse_score\"\nWHERE \"url\" =~ /$url$/ AND \"category\" =~ /$category$/\nGROUP BY \"category\"\nORDER BY time DESC\nLIMIT 1",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -118,7 +118,7 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "/.*accessibility*./",
+            "regex": "/.*accessibility.*/",
             "renamePattern": "Accessibility"
           }
         }
@@ -213,7 +213,7 @@
             "type": "influxdb",
             "uid": "P16E1228BE3E8EB1D"
           },
-          "query": "SELECT * FROM $score where \"url\"='$url' and \"category\"=~ /$category$/ group by \"category\"",
+          "query": "SELECT * FROM $score where \"url\"=~ /$url$/ and \"category\"=~ /$category$/ group by \"category\"",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -299,7 +299,8 @@
       },
       "id": 7,
       "options": {
-        "displayMode": "gradient",
+        "displayMode": "lcd",
+        "maxVizHeight": 300,
         "minVizHeight": 10,
         "minVizWidth": 0,
         "namePlacement": "auto",
@@ -312,16 +313,17 @@
           "values": false
         },
         "showUnfilled": true,
+        "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "P16E1228BE3E8EB1D"
           },
-          "query": "SELECT * FROM \"$metrics\" WHERE \"url\"='$url' AND \"gather_mode\"='$mode' AND \"metric\"=~ /$metric$/ GROUP BY \"metric\" ORDER BY \"time\" DESC limit 1",
+          "query": "SELECT * FROM \"$metrics\" WHERE \"url\"=~ /$url$/ AND \"gather_mode\"='$mode' AND \"metric\"=~ /$metric$/ GROUP BY \"metric\" ORDER BY \"time\" DESC limit 1",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -471,7 +473,7 @@
             "uid": "P16E1228BE3E8EB1D"
           },
           "hide": false,
-          "query": "SELECT * FROM \"$metrics\" where \"url\"='$url' and \"gather_mode\"='$mode' and \"metric\"=~ /$metric$/ group by \"metric\"",
+          "query": "SELECT * FROM \"$metrics\" where \"url\"=~ /$url$/ and \"gather_mode\"='$mode' and \"metric\"=~ /$metric$/ group by \"metric\"",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series"
@@ -526,8 +528,8 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "5s",
-  "schemaVersion": 38,
+  "refresh": "",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
@@ -558,7 +560,7 @@
         "options": [],
         "query": "show tag values from $metrics with key=\"url\"",
         "refresh": 1,
-        "regex": "",
+        "regex": "/.*base_url/.*/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -618,14 +620,14 @@
           "type": "influxdb",
           "uid": "P16E1228BE3E8EB1D"
         },
-        "definition": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_metrics WITH KEY=\"metric\"",
+        "definition": "SHOW TAG VALUES ON lighthouse FROM lighthouse_metrics WITH KEY=\"metric\"",
         "hide": 0,
         "includeAll": true,
         "label": "Metric",
         "multi": true,
         "name": "metric",
         "options": [],
-        "query": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_metrics WITH KEY=\"metric\"",
+        "query": "SHOW TAG VALUES ON lighthouse FROM lighthouse_metrics WITH KEY=\"metric\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -646,14 +648,14 @@
           "type": "influxdb",
           "uid": "P16E1228BE3E8EB1D"
         },
-        "definition": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_score WITH KEY=\"category\"",
+        "definition": "SHOW TAG VALUES ON lighthouse FROM lighthouse_score WITH KEY=\"category\"",
         "hide": 0,
         "includeAll": true,
         "label": "Category",
         "multi": true,
         "name": "category",
         "options": [],
-        "query": "SHOW TAG  VALUES ON lighthouse FROM lighthouse_score WITH KEY=\"category\"",
+        "query": "SHOW TAG VALUES ON lighthouse FROM lighthouse_score WITH KEY=\"category\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -670,6 +672,6 @@
   "timezone": "",
   "title": "Lighthouse Report Metrics",
   "uid": "ab5bc562-899f-4e3f-80af-746b9c126ec7",
-  "version": 2,
+  "version": 8,
   "weekStart": ""
 }

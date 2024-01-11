@@ -1,0 +1,11 @@
+{
+    "followNewTab": true,
+    "fps": 25,
+    "quality": 100,
+    "ffmpeg_Path": null,
+    "videoFrame": {
+        "width": 800,
+        "height": 600
+    },
+    "aspectRatio": "4:3"
+}

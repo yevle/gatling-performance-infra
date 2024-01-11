@@ -6,3 +6,4 @@
 /gatling/lib
 /lighthouse/node_modules
 /lighthouse/report
+*.mp4

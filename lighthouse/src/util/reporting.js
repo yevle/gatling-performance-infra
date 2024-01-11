@@ -8,56 +8,54 @@ import { compareReports } from './compare-reports.js';
 
 const date = new Date().getTime()
 const allReportsDir = `${process.cwd()}/report`
-const reportDir = `${allReportsDir}/${date}`
+export const reportDir = `${allReportsDir}/${date}`
 const reportType = `${process.env.REPORT_TYPE}`
 
-
-export async function writeAggregatedMetrics(result) {
+export async function writeAggregatedMetrics(aggregatedSessionResult) {
     if (process.env.WRITE_TO_DB) {
-        await writeMetricsToInfluxDb(result)
+        await writeMetricsToInfluxDb(aggregatedSessionResult)
     }
 }
 
-export async function generateTestReport(result) {
+export async function generateTestReport(testResult) {
     if (process.env.CREATE_REPORT) {
         createReportDirectories()
-        await generateReports(result)
+        await generateReports(testResult)
     }
 }
 
-async function writeMetricsToInfluxDb(result) {
-    const categories = flowConfig.config.settings.onlyCategories
-    const steps = result.steps
+async function writeMetricsToInfluxDb(aggregatedSessionResult) {
+    const { onlyCategories } = flowConfig.config.settings
+    const { steps } = aggregatedSessionResult
 
     await steps.forEach(async step => {
-        const fullUrl = step.lhr.finalDisplayedUrl
-        const modifiedUrl = fullUrl.replace(`${process.env.BASE_URL}`, 'base_url/')
-        const gatherMode = step.lhr.gatherMode
+        const { finalDisplayedUrl, gatherMode } = step.lhr
+        const modifiedUrl = finalDisplayedUrl.replace(`${process.env.BASE_URL}`, 'base_url/')
 
-        categories.forEach(async category => {
+        onlyCategories.forEach(async category => {
             if (step.lhr.categories[category]) {
-                const categoryScore = step.lhr.categories[category].score
-                await writeScores(category, modifiedUrl, categoryScore, gatherMode)
+                const { score } = step.lhr.categories[category]
+                await writeScores(category, modifiedUrl, score, gatherMode)
             }
         })
         metrics.forEach(async metric => {
             if (step.lhr.audits[metric]) {
-                const metricValue = step.lhr.audits[metric].numericValue
-                await writeMetrics(metric, modifiedUrl, metricValue, gatherMode)
+                const { numericValue } = step.lhr.audits[metric]
+                await writeMetrics(metric, modifiedUrl, numericValue, gatherMode)
             }
         })
     })
 
 }
 
-async function generateReports(result) {
-    await generateSummaryReport(result)
+async function generateReports(testResult) {
+    await generateSummaryReport(testResult)
     // await generateReportForEachStep(result)
 }
 
-async function generateSummaryReport(result) {
+async function generateSummaryReport(testResult) {
     const reportPath = `${reportDir}/summary-${date}.${reportType}`
-    const summaryReport = generateReport(result, reportType)
+    const summaryReport = generateReport(testResult, reportType)
     fs.writeFileSync(reportPath, summaryReport);
 
     const report = {
@@ -69,11 +67,11 @@ async function generateSummaryReport(result) {
 }
 
 async function generateReportForEachStep(result) {
-    const steps = result.steps
+    const { steps } = result
     await steps.forEach(async step => {
         const stepReport = generateReport(step.lhr, reportType)
-        const url = step.lhr.finalDisplayedUrl
-        const reportName = url.replace(/\//g, ".")
+        const { finalDisplayedUrl } = step.lhr
+        const reportName = finalDisplayedUrl.replace(/\//g, ".")
         fs.writeFileSync(`${reportDir}/${reportName}.${reportType}`, stepReport)
     })
 }
@@ -91,7 +89,7 @@ async function sendReportSummary(report) {
     }
     if (process.env.SEND_COMPARE_REPORT_URL) {
         compareReports()
-        const compareReportUrl = `${process.env.NGINX_HOST}/report/0/compare-report.html`
+        const compareReportUrl = `${process.env.WORK_SPACE}/report/0/compare-report.html`
         await sendReportUrl(compareReportUrl)
     }
 }

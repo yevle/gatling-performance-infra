@@ -1,7 +1,9 @@
 
-
 export class AbstractPage {
 
+    /**
+     * @param {import("lighthouse").UserFlow} flow 
+     */
     constructor(flow) {
         this.flow = flow
         this.url = this.flow._page.url()

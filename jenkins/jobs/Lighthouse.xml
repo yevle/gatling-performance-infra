@@ -8,7 +8,7 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>SLACK_KEY</name>
+          <name>CRYPTO_KEY</name>
           <description>Slack crypto key</description>
           <defaultValue>key</defaultValue>
           <trim>true</trim>

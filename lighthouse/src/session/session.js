@@ -6,7 +6,7 @@ import { generateTestReport, writeAggregatedMetrics } from '../util/reporting.js
 import { MainPage } from '../page/main-page.js'
 import { flow } from '../../test.js'
 
-let aggregatedTestResult = { steps: [] }
+let testResult = { steps: [] }
 let aggregatedSessionResult = { steps: [] }
 const browserOptions = util.parseJsonIntoObj(`${process.cwd()}/resources/browser-options.json`)
 browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
@@ -48,7 +48,7 @@ export async function endSession() {
     const steps = result.steps
     steps.forEach(step => {
         aggregatedSessionResult.steps.push(step)
-        aggregatedTestResult.steps.push(step)
+        testResult.steps.push(step)
     });
     await flow._page.browser().close()
     console.log('Session closed.')
@@ -57,5 +57,5 @@ export async function endSession() {
 }
 
 export async function endTest(){
-    await generateTestReport(aggregatedTestResult)
+    await generateTestReport(testResult)
 }
