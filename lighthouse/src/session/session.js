@@ -58,7 +58,7 @@ export async function startLhFlowOpenMainPage() {
 
 export async function endSession() {
     const result = await flow.createFlowResult()
-    const steps = result.steps
+    const {steps} = result
     steps.forEach(step => {
         aggregatedSessionResult.steps.push(step)
         testResult.steps.push(step)
