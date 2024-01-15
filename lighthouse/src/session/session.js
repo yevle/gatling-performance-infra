@@ -1,16 +1,18 @@
 import { startFlow } from 'lighthouse'
-import puppeteer from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer'
 import * as util from '../util/util.js'
 import { sendMsg } from '../util/slack.js'
 import { generateTestReport, writeAggregatedMetrics } from '../util/reporting.js'
 import { MainPage } from '../page/main-page.js'
 import { flow } from '../../test.js'
 
+export let flowConfig
 let testResult = { steps: [] }
 let aggregatedSessionResult = { steps: [] }
 const browserOptions = util.parseJsonIntoObj(`${process.cwd()}/resources/browser-options.json`)
 browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
-export const flowConfig = util.parseJsonIntoObj(`${process.cwd()}/resources/flow-config.json`)
+const desktopFlowConfig = util.parseJsonIntoObj(`${process.cwd()}/resources/desktop-flow-config.json`)
+const mobileFlowConfig = util.parseJsonIntoObj(`${process.cwd()}/resources/mobile-flow-config.json`)
 
 export async function startBrowser(url) {
     const browser = await puppeteer.launch(browserOptions)
@@ -23,6 +25,7 @@ export async function startLhFlowOpenMainPage() {
     let page
     let flow
     let message
+
     try {
         page = await startBrowser(`${process.env.BASE_URL}`)
     } catch (error) {
@@ -31,6 +34,18 @@ export async function startLhFlowOpenMainPage() {
         await sendMsg(message)
     }
     try {
+        switch (process.env.FLOW_CONFIG) {
+            case "desktop": flowConfig = desktopFlowConfig
+                setViewport(page, flowConfig)
+                break;
+            case "mobile": flowConfig = mobileFlowConfig
+                setViewport(page, flowConfig)
+                break;
+            default:
+                flowConfig = desktopFlowConfig
+                process.env.FLOW_CONFIG = 'desktop'
+                break;
+        }
         flow = await startFlow(page, flowConfig)
         console.log('Session started.')
     } catch (error) {
@@ -40,8 +55,6 @@ export async function startLhFlowOpenMainPage() {
     }
     return new MainPage(flow)
 }
-
-
 
 export async function endSession() {
     const result = await flow.createFlowResult()
@@ -56,6 +69,16 @@ export async function endSession() {
     aggregatedSessionResult = { steps: [] }
 }
 
-export async function endTest(){
+export async function endTest() {
     await generateTestReport(testResult)
+}
+
+/**
+ * 
+ * @param {Page} page 
+ */
+async function setViewport(page, flowConfig) {
+    const { width } = flowConfig.config.settings.screenEmulation
+    const { height } = flowConfig.config.settings.screenEmulation
+    page.setViewport({ width, height })
 }

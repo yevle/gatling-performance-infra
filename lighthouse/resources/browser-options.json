@@ -1,5 +1,5 @@
 {
-    "headless": "new",
+    "headless": false,
     "args": [
         "--start-maximized",
         "--no-sandbox",

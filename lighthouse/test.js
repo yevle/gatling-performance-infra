@@ -8,7 +8,7 @@ import { parseJsonIntoObj } from "./src/util/util.js";
 
 export let flow
 let mainPage
-const recorderOptions = parseJsonIntoObj(`${process.cwd()}/resources/video-recorder-options.json`)    
+const recorderOptions = parseJsonIntoObj(`${process.cwd()}/resources/video-recorder-options.json`)
 
 before(async () => {
     const message = 'Ui testing started.'

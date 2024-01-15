@@ -1,0 +1,28 @@
+{
+    "config": {
+        "extends": "lighthouse:default",
+        "settings": {
+            "formFactor": "mobile",
+            "throttling": {
+                "cpuSlowdownMultiplier": 4,
+                "requestLatencyMs": 2000,
+                "downloadThroughputKbps": 1638.4,
+                "uploadThroughputKbps": 786.4,
+                "rttMs": 200
+            },
+            "screenEmulation": {
+                "mobile": true,
+                "width": 360,
+                "height": 640,
+                "deviceScaleFactor": 2.625,
+                "disabled": false
+            },
+            "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3765.0 Mobile Safari/537.36",
+            "onlyCategories": [
+                "performance",
+                "seo",
+                "accessibility"
+            ]
+        }
+    }
+}
