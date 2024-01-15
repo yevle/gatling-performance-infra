@@ -14,7 +14,7 @@ export class MainPage extends AbstractPage {
     }
 
     async clickLoginLink() {
-        if (process.env.FLOW_CONFIG === 'mobile') {
+        if (process.env.PLATFORM === 'mobile') {
             await this.hamburgerMenu.waitAndClick()
         }
         await this.loginBtn.waitAndClick()

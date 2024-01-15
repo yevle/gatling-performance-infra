@@ -20,7 +20,7 @@
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
-          <name>FLOW_CONFIG</name>
+          <name>PLATFORM</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>desktop</string>
@@ -56,7 +56,7 @@
                 --volumes-from=jenkins \
                 -e CRYPTO_KEY=&quot;${CRYPTO_KEY}&quot; \
                 -e DISPLAY=&quot;${DISPLAY}&quot; \
-                -e FLOW_CONFIG=&quot;${FLOW_CONFIG}&quot; \
+                -e PLATFORM=&quot;${PLATFORM}&quot; \
                 gatling-performance-infra-lighthouse \
                 bash -c &quot;Xvfb ${DISPLAY} -ac &amp; npm test&quot;
             </command>

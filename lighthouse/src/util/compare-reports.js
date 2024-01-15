@@ -23,7 +23,7 @@ export function compareReports() {
         <style>
           .frame {
             width: 100%;
-            height: 1200;
+            height: 2000px;
           }
       
           .frame-l {

@@ -9,10 +9,10 @@ import { flow } from '../../test.js'
 export let flowConfig
 let testResult = { steps: [] }
 let aggregatedSessionResult = { steps: [] }
-const browserOptions = util.parseJsonIntoObj(`${process.cwd()}/resources/browser-options.json`)
-browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
 const desktopFlowConfig = util.parseJsonIntoObj(`${process.cwd()}/resources/desktop-flow-config.json`)
 const mobileFlowConfig = util.parseJsonIntoObj(`${process.cwd()}/resources/mobile-flow-config.json`)
+const browserOptions = util.parseJsonIntoObj(`${process.cwd()}/resources/browser-options.json`)
+browserOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
 
 export async function startBrowser(url) {
     const browser = await puppeteer.launch(browserOptions)
@@ -34,7 +34,7 @@ export async function startLhFlowOpenMainPage() {
         await sendMsg(message)
     }
     try {
-        switch (process.env.FLOW_CONFIG) {
+        switch (process.env.PLATFORM) {
             case "desktop": flowConfig = desktopFlowConfig
                 setViewport(page, flowConfig)
                 break;
@@ -43,7 +43,7 @@ export async function startLhFlowOpenMainPage() {
                 break;
             default:
                 flowConfig = desktopFlowConfig
-                process.env.FLOW_CONFIG = 'desktop'
+                process.env.PLATFORM = 'desktop'
                 break;
         }
         flow = await startFlow(page, flowConfig)

@@ -3,7 +3,7 @@ FROM node
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-RUN apt-get update &&\
+RUN apt-get update && \
     apt-get install -yq chromium xvfb
 
 WORKDIR /lighthouse
