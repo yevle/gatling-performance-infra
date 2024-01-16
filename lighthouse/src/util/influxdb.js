@@ -1,11 +1,13 @@
 import graphite from 'graphite'
 
-export async function writeMetrics(metric, url, metricValue, gatherMode) {
+export async function writeMetrics(metric, url, metricValue, gatherMode, platform) {
     var metric = {
         "lighthouse_metrics": {
             [gatherMode]: {
                 [metric]: {
-                    [url]: metricValue
+                    [platform]: {
+                        [url]: metricValue
+                    }
                 }
             }
         }
@@ -13,12 +15,14 @@ export async function writeMetrics(metric, url, metricValue, gatherMode) {
     writeData(metric)
 }
 
-export async function writeScores(category, url, categoryScore, gatherMode) {
+export async function writeScores(category, url, categoryScore, gatherMode, platform) {
     var score = {
         "lighthouse_score": {
             [category]: {
                 [gatherMode]: {
-                    [url]: categoryScore
+                    [platform]: {
+                        [url]: categoryScore
+                    }
                 }
             }
         }

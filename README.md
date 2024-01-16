@@ -6,8 +6,8 @@ Mihail Belyuk mbelyuk@solvd.com
 -->
 
 # Performance testing framework
-This framework could be used for backend load testing with Gatling load-tool and Lighthouse for web UI performance testing.
-With Grafana open-source visualisation solution you can retrieve real-time metrics for Gatling tests and Prometheus host resources monitoring.
+This framework is designed to be used for backend load testing with Gatling load-tool and Lighthouse for web UI performance testing.
+With Grafana open-source visualisation solution you can retrieve real-time metrics for Gatling and Lighthouse tests, and also perform host resources monitoring with Prometheus.
 
 ## Getting Started
 
@@ -49,8 +49,7 @@ Login to Jenkins with admin/admin(could be changed in docker-compose file).
 By default, jenkins consists of 3 jobs:
 - **GatlingBackend**: runs Gatling simulation with only parameter: -SIMULATION, to set simulation class name.
 - **GatlingBackendParam**: runs Gatling simulation with runtime parameters: -SIMULATION -USERS -RAMPUP -DURATION
-
-- **Lighthouse**: runs load simulation on defined web service with runtime parameter: -SLACK_KEY
+- **Lighthouse**: runs load simulation on defined web service with runtime parameters: -CTYPTO_KEY -DISPLAY -PLATFORM
 
 ## Making your gatling script compatible with framework
 
@@ -60,6 +59,13 @@ Framework accept both .java and .scala versions of scripts. For default GatlingB
 - -DURATION
 
 Before project building, you need to place simulation files in named directory inside 'gatling/simulations/' folder. Also all needed resources should be placed inside 'gatling/resources/' folder.
+
+## Lighthouse script 
+
+Node.js version of Google Lighthouse and Puppeteer tools are being used for creating testing scripts. Runtime parameters:
+ - -CRYPTO_KEY - a secret key used to decrypt encrypted data
+ - -DISPLAY - a display number that must be specified and used by Puppeteer when running tests in headfull mode
+ - -PLATFORM - specifies the device type upon which the tests should be ran
 
 ## Running scenario with GatlingBackendParam job
 
@@ -74,6 +80,16 @@ http://localhost:8181/job/GatlingBackend/gatling/
 
 Also you'll be able to retrieve real-time and post-run metrics on Grafana dashboard. 
 Runtime metrics link is available in job description as well as post-run link will be attached to every runs description on finish.
+
+To run Lighthouse demo script:
+
+**Open Lighthouse job -> Build with Parameters -> Set build parameters  -> Build**
+
+This job will start Lighthouse docker container and execute Lighthouse script.
+
+After the build is finished, Lighthouse workspace will be created with report directory inside. Report directory will contain directories for every test run. Alone stands the directory with naming '0' that stores combined compare report of two most recent test runs.
+
+Also you'll be able to retrieve real-time and post-run metrics on Grafana dashboard. The links to Grafana dashboard and compare report are sent to specified Slack channel after every test run.
 
 ## Grafana
 
@@ -101,6 +117,22 @@ You need to choose builds to compare with variables: *Recent Build* and *Previou
 After you apply new time range by clicking ```Zoom to data``` button on first graph, all the data will be correctly shown.
 
 If second ("previous") build has longer duration than first ("recent"), you need to manually add time difference to dashboards' global time range, to see both graphs in full.
+
+### Google Lighthouse metrics
+
+**Lighthouse scores** - Lighthouse analyzes a page and generates scores from 0 to 100 for each category:
+- Performance - is judged on how quick it takes your webpage to load.
+- Accessibility - is judged by how accessible your website is. 
+- Best Practices - relates to best practices and conventions used in modern web development.
+- SEO (Search Engine Optimisation) - is judged by making sure the page is optimised for search engine results. 
+
+**Lighthouse metrics** - Lighthouse Web Vitals are a set of metrics that measure the performance and user experience of a website, focused on real-world user experience:
+- First Contentful Paint (FCP) - measures how long it takes the browser to render the first piece of DOM content after a user navigates to your page.
+- Speed Index (SI) - measures how quickly content is visually displayed during page load.
+- Total Blocking Time (TBT) - measures the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
+- Largest Contentful Paint (LCP) - reports the render time of the largest image or text block visible within the viewport, relative to when the user first navigated to the page.
+- Cumulative Layout Shift (CLS) - is a measure of the largest burst of layout shift scores for every unexpected layout shift that occurs during the entire lifespan of a page.
+- Interaction to Next Paint (INP) - captures visual responsiveness to interactions.
 
 ### Prometheus Metrics
 
