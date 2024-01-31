@@ -1,24 +1,19 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <slave>
-    <name>agent1</name>
-    <description>Default agent. You need to set up SSH key:
-        https://www.jenkins.io/doc/book/using/using-agents/</description>
-    <remoteFS>/home/jenkins</remoteFS>
+    <name>agent2</name>
+    <description>Default agent. You need to copy secret from here, put it into run.sh file and rebuild docker-compose.</description>
+    <remoteFS>home/jenkins</remoteFS>
     <numExecutors>3</numExecutors>
     <mode>NORMAL</mode>
     <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
-    <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@2.948.vb_8050d697fec">
-        <host>agent1</host>
-        <port>22</port>
-        <credentialsId>jenkins</credentialsId>
-        <launchTimeoutSeconds>60</launchTimeoutSeconds>
-        <maxNumRetries>10</maxNumRetries>
-        <retryWaitTime>15</retryWaitTime>
-        <sshHostKeyVerificationStrategy class="hudson.plugins.sshslaves.verifiers.ManuallyTrustedKeyVerificationStrategy">
-            <requireInitialManualTrust>false</requireInitialManualTrust>
-        </sshHostKeyVerificationStrategy>
-        <tcpNoDelay>true</tcpNoDelay>
+    <launcher class="hudson.slaves.JNLPLauncher">
+        <workDirSettings>
+            <disabled>false</disabled>
+            <internalDir>remoting</internalDir>
+            <failIfWorkDirIsMissing>false</failIfWorkDirIsMissing>
+        </workDirSettings>
+        <webSocket>false</webSocket>
     </launcher>
-    <label>agent1</label>
+    <label>default</label>
     <nodeProperties/>
 </slave>

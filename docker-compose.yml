@@ -31,7 +31,6 @@ services:
     ports:
       - "8086:8086"
       - "2003:2003"
-      - "2004:2004"
       - "2005:2005"
     restart: always
 
@@ -53,16 +52,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - jenkins-home:/var/jenkins_home
     restart: always
-  jenkins-agent:
+  jenkins-agent1:
     build: ./jenkins-agent
     container_name: agent1
     privileged: true
-    ports:
-      - "22:22"
     networks:
       - framework_net
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - jenkins-agent-home:/home/jenkins
 
   docker-dind:
