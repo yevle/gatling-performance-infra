@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:latest-jdk11
+FROM jenkins/jenkins:latest-jdk17
 
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false -Dhudson.model.DirectoryBrowserSupport.CSP=''"
 COPY security.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy

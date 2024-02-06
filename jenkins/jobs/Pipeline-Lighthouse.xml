@@ -1,0 +1,39 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1400.v7fd111b_ec82f">
+    <actions>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2175.v76a_fff0a_2618"/>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2175.v76a_fff0a_2618">
+            <jobProperties/>
+            <triggers/>
+            <parameters/>
+            <options/>
+        </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+    </actions>
+    <description>Running Lighthouse simulation from git.</description>
+    <keepDependencies>false</keepDependencies>
+    <properties/>
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3853.vb_a_490d892963">
+        <script>pipeline {
+            agent {
+            node(&apos;agent-lighthouse&apos;)
+            }
+            stages {
+            stage(&apos;Test&apos;) {
+            steps {
+            echo &apos;Hello&apos;
+
+            git branch: &apos;main&apos;, credentialsId: &apos;sperftest&apos;, url: &apos;https://github.com/sperftest/lighthouse-test.git&apos;
+
+            echo &quot;Current build: ${currentBuild.number}&quot;
+
+            sh &quot;mkdir report &amp; npm install&quot;
+            sh &quot;npm test&quot;
+            }
+            }
+            }
+            }</script>
+        <sandbox>true</sandbox>
+    </definition>
+    <triggers/>
+    <disabled>false</disabled>
+</flow-definition>

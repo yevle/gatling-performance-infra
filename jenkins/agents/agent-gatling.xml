@@ -1,8 +1,10 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <slave>
-    <name>agent2</name>
-    <description>Default agent. You need to copy secret from here, put it into run.sh file and rebuild docker-compose.</description>
-    <remoteFS>home/jenkins</remoteFS>
+    <name>agent-gatling</name>
+    <description>Default Gatling agent with preinstalled Maven.
+        You need to copy secret from here and put it into run.sh file and rebuild docker-compose.
+    </description>
+    <remoteFS>/agent</remoteFS>
     <numExecutors>3</numExecutors>
     <mode>NORMAL</mode>
     <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>

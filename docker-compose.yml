@@ -13,7 +13,6 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_USERS_ALLOW_ORG_CREATE=false
-      - GF_INSTALL_PLUGINS=briangann-datatable-panel
     volumes:
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/datasources:/etc/grafana/provisioning/datasources
@@ -36,8 +35,8 @@ services:
 
   jenkins:
     build: ./jenkins
-    depends_on:
-      - docker-dind
+#    depends_on:
+#      - docker-dind
     container_name: jenkins
     networks:
       - framework_net
@@ -48,40 +47,48 @@ services:
       - JENKINS_ADMIN_LOGIN=admin
       - JENKINS_ADMIN_PASSWORD=admin
     volumes:
-      - docker-dind:/usr/local/bin/dind/
+#      - docker-dind:/usr/local/bin/dind/
       - /var/run/docker.sock:/var/run/docker.sock
       - jenkins-home:/var/jenkins_home
     restart: always
-  jenkins-agent1:
+  jenkins-agent:
     build: ./jenkins-agent
-    container_name: agent1
+    container_name: jagent-gatling
     privileged: true
     networks:
       - framework_net
     volumes:
-      - jenkins-agent-home:/home/jenkins
+      - jenkins-agent:/agent
+  jenkins-agent-lh:
+    build: ./jenkins-agent-lh
+    container_name: jagent-lighthouse
+    privileged: true
+    networks:
+      - framework_net
+    volumes:
+      - jenkins-agent-lh:/agent
 
-  docker-dind:
-    image: docker:dind
-    networks:
-      - framework_net
-    volumes:
-      - docker-dind:/usr/local/bin
-    container_name: docker-dind
-    privileged: true
-    restart: always
-    
-  lighthouse:
-    container_name: lighthouse
-    build: ./lighthouse
-    networks:
-      - framework_net
-    depends_on:
-      - influxdb
-    volumes:
-      - lighthouse:/lighthouse/report
-    env_file:
-      - ./lighthouse/.env
+#  docker-dind:
+#    image: docker:dind
+#    networks:
+#      - framework_net
+#    volumes:
+#      - docker-dind:/usr/local/bin
+#    container_name: docker-dind
+#    privileged: true
+#    restart: always
+#    
+#  lighthouse:
+#    container_name: lighthouse
+#    build: ./lighthouse
+#    networks:
+#      - framework_net
+#    depends_on:
+#      - influxdb
+#    volumes:
+#      - lighthouse:/lighthouse/report
+#    env_file:
+#      - ./lighthouse/.env
 
 #  gatling:
 #    container_name: gatling
@@ -165,12 +172,13 @@ services:
 #      - /var/lib/docker/containers:/var/lib/docker/containers:ro
 
 volumes:
-  docker-dind:
   jenkins-home:
-  jenkins-agent-home:
+  jenkins-agent:
+  jenkins-agent-lh:
   influxdb:
   prometheus_data: {}
-  lighthouse:
+#  docker-dind:
+#  lighthouse:
 
 networks:
   framework_net:

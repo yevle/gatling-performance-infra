@@ -26,8 +26,9 @@
     </properties>
     <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3837.v305192405b_c0">
         <script>pipeline {
-            agent any
-
+            agent {
+            node(&apos;agent-gatling&apos;)
+            }
             stages {
             stage(&apos;Test&apos;) {
             steps {
