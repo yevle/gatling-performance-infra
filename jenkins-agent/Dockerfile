@@ -1,9 +1,9 @@
 FROM jenkins/inbound-agent:latest-jdk17
 
 COPY run.sh /run.sh
-COPY crypto.key /agent/crypto.key
+COPY crypto.key /home/jenkins/agent/crypto.key
 
-ENV CRYPTO_KEY_PATH "agent/crypto.key"
+ENV CRYPTO_KEY_PATH "/home/jenkins/agent/crypto.key"
 
 USER root
 RUN apt-get -y update && apt-get upgrade -y && \

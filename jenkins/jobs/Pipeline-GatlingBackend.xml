@@ -39,6 +39,7 @@
             echo &quot;Current build: ${currentBuild.number}&quot;
 
             sh &quot;mvn clean -e gatling:test -DBUILD_NUMBER=${currentBuild.number} -Dgatling.simulationClass=com.eshop.qa.simulation.NewParameterizedSimulation&quot;
+            sh &quot;mvn scala:run -DmainClass=com.eshop.qa.utils.SlackNotificationMessenger&quot;
             }
             }
             }
